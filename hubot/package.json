@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "cli-table2": "^0.2.0",
+    "hubot": "^2.18.0",
+    "hubot-flowdock": "git://github.com/killix/hubot-flowdock.git",
+    "node-uuid": "^1.4.7",
+    "numeral": "^1.5.3",
+    "ramda": "^0.20.1",
+    "ws": "^1.0.1"
+  }
+}

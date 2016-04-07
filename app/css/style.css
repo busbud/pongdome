@@ -1,0 +1,490 @@
+body {
+  font-family: 'Open Sans';
+  font-size: 3vmin;
+  color: #414143;
+}
+
+table {
+  font-size: inherit;
+  color: inherit;
+}
+
+#leaderboard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#leaderboard header {
+  flex: 1;
+  display: flex;
+}
+
+#leaderboard .leaderboard,
+#leaderboard .stats {
+  flex: 4;
+}
+
+#leaderboard .container {
+  flex: 5;
+  background-color: #414143;
+  color: white;
+  display: flex;
+  margin: .5em;
+  padding: 0 1.5em 1.5em;
+  justify-content: space-between;
+}
+
+#leaderboard h2 {
+  flex: 1;
+  text-align: center;
+}
+
+#leaderboard h2,
+#leaderboard h3 {
+  text-transform: uppercase;
+}
+
+#leaderboard h3 {
+  color: rgba(255, 255, 255, .3);
+  font-weight: 300;
+  font-size: .9em;
+}
+
+#leaderboard .leaderboard {
+  order: 1;
+}
+
+#leaderboard .leaderboard .title {
+  text-align: center;
+  height: 2em;
+}
+
+#leaderboard .leaderboard h3 {
+  display: inline-block;
+  margin-top: 1.5em;
+  background: #414143;
+  padding: 0 1em;
+}
+
+#leaderboard h2 {
+  order: 2;
+  margin-top: .6em;
+}
+
+#leaderboard .stats {
+  order: 3;
+  margin-top: 2em;
+}
+
+#leaderboard .leaderboard .content,
+#leaderboard .stats {
+  border-top: 2px solid rgba(255, 255, 255, .3);
+}
+
+#leaderboard .leaderboard .content {
+  padding-top: 1.5em;
+}
+
+#leaderboard table {
+  width: 100%;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+#leaderboard table th {
+  font-weight: 300;
+}
+
+#leaderboard table thead th:first-child,
+#leaderboard table thead th:nth-child(2) {
+  visibility: hidden;
+}
+
+#leaderboard table tbody th {
+  text-align: left;
+}
+
+#leaderboard table tbody td:first-child {
+  color: rgba(255, 255, 255, .3);
+}
+
+#leaderboard table tbody td:nth-child(3) {
+  color: #ff9e9e;
+}
+
+#leaderboard table td {
+  font-family: 'Open Sans Condensed';
+  text-align: center;
+}
+
+#leaderboard table thead th {
+  font-size: .5em;
+  color: rgba(255, 255, 255, .3);
+}
+
+#leaderboard .stats hr {
+  width: 6em;
+}
+
+#leaderboard .stats {
+  text-align: center;
+  font-weight: 300;
+}
+
+#winning-streak .value,
+#consecutive-losses .value {
+  font-family: 'Open Sans Condensed';
+  font-size: 2em;
+}
+
+#winning-streak .name,
+#consecutive-losses .name {
+  color: #88e2f2;
+  text-transform: uppercase;
+}
+
+#winner {
+  display: none;
+  background-image: url(../images/win.png);
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+#winner_name {
+  font-size: 3em;
+}
+
+#winner hr {
+  width: 1em;
+  border-bottom: 1px solid currentcolor;
+}
+
+#winner table td {
+  text-align: right;
+  padding: 0 .5em;
+  font-weight: 300;
+  font-family: 'Open Sans Condensed';
+}
+
+#scoreboard {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+#scoreboard header {
+  background-color: #fafafa;
+  flex: 1;
+  display: flex;
+}
+
+header .bg {
+  background-image: url(../images/logo.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-origin: content-box;
+  padding: 1.5em 3em;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#scoreboard section {
+  flex: 2;
+}
+
+#scoreboard section > div {
+  position: relative;
+}
+
+#scoreboard section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#scoreboard section,
+#player2 {
+  border-top: 2px solid #acacac;
+}
+
+#player1, #player2 {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+#player1 > div,
+#player2 > div {
+  flex: 1;
+}
+
+#player1name-box,
+#player2name-box {
+  padding-left: 2em;
+}
+
+#player1 .arrow,
+#player2 .arrow {
+  background-image: url(../images/arrow.svg);
+  height: .7em;
+  width: 3em;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+#player1 .arrow {
+  transform: rotate(180deg);
+}
+
+#player1 .rank,
+#player2 .rank {
+  font-weight: bold;
+  font-size: .7em;
+}
+
+#player1 .ratio,
+#player2 .ratio {
+  font-size: .7em;
+}
+
+#player1name,
+#player2name {
+  font-size: 2em;
+}
+
+#player1name {
+  color: #88e2f2;
+}
+
+#player2name {
+  color: #ff9e9e;
+}
+
+#player1 > div:not(:last-child):not(:first-child),
+#player2 > div:not(:last-child):not(:first-child) {
+  font-family: 'Open Sans Condensed';
+  font-size: 5em;
+  font-weight: 300;
+  text-align: right;
+}
+
+#player1 > div:first-child,
+#player2 > div:first-child {
+  text-transform: uppercase;
+}
+
+#player1 > div:first-child,
+#player2 > div:first-child,
+#player1 > div:last-child,
+#player2 > div:last-child {
+  flex: 2;
+}
+
+#player1 > div:last-child,
+#player2 > div:last-child {
+  text-align: center;
+}
+
+#scoreboard section table tr :nth-child(1) {
+  width: 30%;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+#scoreboard section table tr :nth-child(2),
+#scoreboard section table tr :nth-child(3),
+#scoreboard section table tr :nth-child(4) {
+  width: 10%;
+  font-family: 'Open Sans Condensed';
+  font-weight: 300;
+}
+
+#scoreboard section table tr :nth-child(5) {
+  width: 20%;
+}
+
+#scoreboard .service {
+  display: none;
+  color: #f07319;
+  border: 2px solid #f07319;
+  padding: .2em 2em;
+  text-transform: uppercase;
+}
+
+#scoreboard .serving .service {
+  display: inline-block;
+}
+
+.match-ups-today,
+#incoming-game {
+  padding: 1em;
+}
+
+.match-ups-today .title,
+#incoming-game .title {
+  color: rgba(0, 0, 0, .6);
+  text-transform: uppercase;
+  display: block;
+  font-size: .7em;
+}
+
+#incoming-game .title {
+  text-align: right;
+}
+
+.match-ups-today .value,
+#incoming-game .player1,
+#incoming-game .player2 {
+  font-weight: 600;
+  font-size: 1.5em;
+  text-transform: uppercase;
+}
+
+#incoming-game .vs {
+  font-variant: small-caps;
+  text-transform: none;
+}
+
+#scoreboard footer {
+  background-color: #414143;
+  display: flex;
+  justify-content: space-between;
+  margin: .5em;
+  flex: 1.5;
+}
+
+#scoreboard h2 {
+  color: white;
+  font-weight: normal;
+  text-transform: uppercase;
+  order: 2;
+  flex: 1;
+  text-align: center;
+}
+
+#scoreboard footer .content {
+  border-top: 2px solid white;
+  padding-top: 2em;
+}
+
+#last-game {
+  order: 1;
+}
+
+#head-to-head {
+  order: 3;
+}
+
+#head-to-head .content,
+#biggest-crush .content {
+  display: flex;
+  justify-content: center;
+}
+
+#head-to-head .value,
+#head-to-head .dash,
+#biggest-crush .value,
+#biggest-crush .dash {
+  font-size: 2em;
+  color: white;
+}
+
+#head-to-head .dash,
+#biggest-crush .dash {
+  padding: 0 .5em;
+}
+
+#last-game,
+#head-to-head {
+  flex: 4;
+}
+
+#last-game .title,
+#head-to-head .title,
+#biggest-crush .title {
+  text-align: center;
+}
+
+#scoreboard footer table {
+  margin: auto;
+}
+
+#scoreboard footer th,
+#scoreboard footer td {
+  padding: .5em 1em;
+  text-align: right;
+}
+
+#scoreboard footer td,
+#head-to-head .value,
+#biggest-crush .value {
+  font-family: 'Open Sans Condensed';
+  font-weight: 300;
+  color: white;
+}
+
+#scoreboard footer th,
+#scoreboard footer,
+#scoreboard footer .name {
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+#scoreboard footer tr:first-child th,
+.player1wins .name {
+  color: #88e2f2;
+}
+
+#scoreboard footer tr:nth-child(2) th,
+.player2wins .name {
+  color: #ff9e9e;
+}
+
+.player1wins {
+  text-align: right;
+}
+
+.player2wins {
+  text-align: left;
+}
+
+#last-game h3,
+#head-to-head h3 {
+  color: rgba(255, 255, 255, .3);
+  text-transform: uppercase;
+  font-weight: 300;
+  text-align: center;
+  display: inline-block;
+  margin-bottom: -.5em;
+  background: #414143;
+  padding: 0 1em;
+}
+
+#message_overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .7);
+  color: white;
+  align-items: center;
+  justify-content: center;
+}
+
+#message_overlay_content {
+  border: 3px solid white;
+  padding: .5em 1em;
+}

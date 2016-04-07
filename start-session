@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+# Go in the app directory
+cd "$(dirname "$0")"
+
+# Ensure Bash shell
+export SHELL=bash
+
+# Create a new tmux session named `app`
+tmux new-session -d -s app
+
+# Type `nvm use` and `./start-app` in the new session.
+# Allows to get a regular shell without hack when `^C` the app
+tmux send-keys -t app 'nvm use' C-m
+tmux send-keys -t app ./start-app C-m

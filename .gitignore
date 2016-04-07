@@ -1,0 +1,7 @@
+/node_modules/
+/dev/*
+!/dev/package.json
+/app/images/win.png
+/app/vendor/
+/app/config.json
+/pongdome.log

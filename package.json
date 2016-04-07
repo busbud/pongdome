@@ -1,0 +1,46 @@
+{
+  "name": "pongdome",
+  "version": "0.0.1",
+  "description": "Only if you take ping pong seriously. Seriously.",
+  "homepage": "https://github.com/busbud/pongdome",
+  "bugs": {
+    "url": "https://github.com/busbud/pongdome/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Busbud",
+    "url": "https://www.busbud.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/busbud/pongdome.git"
+  },
+  "scripts": {
+    "build": "git show origin/assets:win.png > app/images/win.png && ln -fs ../../node_modules/{normalize.css,npm-font-open-sans{,-condensed}} app/vendor",
+    "db:create": "./tasks/db-create",
+    "lint": "eslint .",
+    "postinstall": "npm run build",
+    "start": "cd app && electron ."
+  },
+  "dependencies": {
+    "async": "^1.5.2",
+    "electron-prebuilt": "^0.36.11",
+    "elo-js": "^1.0.1",
+    "lodash": "^4.6.1",
+    "moment": "^2.12.0",
+    "normalize.css": "^4.0.0",
+    "npm-font-open-sans": "0.0.3",
+    "npm-font-open-sans-condensed": "0.0.2",
+    "onoff": "^1.0.4",
+    "pg": "^4.5.1",
+    "winston": "^2.2.0",
+    "ws": "^1.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^1.10.0",
+    "eslint-config-busbud": "^0.1.2"
+  },
+  "eslintConfig": {
+    "extends": "busbud"
+  }
+}

@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+createdb pongdome
+psql pongdome < "$(dirname "$0")/../sql/schema.sql"
