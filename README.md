@@ -157,8 +157,26 @@ database, and get an environment running for you:
 ```sh
 nvm install
 nvm use
+npm install
 npm run db:create
 npm start
+```
+
+### Hubot
+
+PongDome uses [Hubot][hubot] to communicate with your chat system.
+
+[hubot]: https://hubot.github.com/
+
+Go in the `hubot` directory and run the following, example for using
+Flowdock adapter:
+
+```sh
+nvm use
+npm install
+npm install hubot-flowdock
+export HUBOT_FLOWDOCK_API_TOKEN=your-token
+npm start flowdock
 ```
 
 ## Testing
