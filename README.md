@@ -259,3 +259,44 @@ git pull
 ./start-app
 ^B D
 ```
+
+## History and thanks
+
+This project was initially developed in two days, during the
+[summer 2015 Busbud hackaton][hackaton], by [Dustin][dustin] and
+[Cole][cole].
+
+At this time, it was only working for our Flowdock, our managed
+database, our TV, and was nearly totally undocumented. While it was not
+portable, it was perfect for us!
+
+PongDome was continuously improved at our lost hours with new
+contributors in the company, [Simon][simon], [Chris][chris], [Tim][tim]
+and [Val][val].
+
+Val always believed that PongDome ought to be open source, and
+surrounded himself with [Pec][pec], [Dorian][dorian], [Daniel][daniel]
+and [Issam][issam] during the spring 2016 hackaton to achieve this.
+
+The new version featured a brand new responsive design, a Hubot
+integration and challenge/accept system rewrite to allow usage with any
+chat system, adaptations to configure the database, a complete
+documentation and code cleaning (even there is still a lot of room for
+improvement on both points), and a [presentation video][pongdome-video]
+by [Legato Productions][legato].
+
+We then squashed everything in a new public repository, with a MIT
+license, and here begins the new free and open source life of PongDome!
+
+[hackaton]: https://www.busbud.com/blog/busbuds-hackathon-got-six-awesome-projects-done-two-days/
+[dustin]: https://github.com/dustinblackman
+[cole]: https://github.com/Cole-macd
+[simon]: https://github.com/smaspe
+[chris]: https://github.com/Chris911
+[tim]: https://github.com/TimmyCarbone
+[val]: https://github.com/valeriangalliat
+[pec]: http://www.pec-design.com/
+[dorian]: https://twitter.com/doriantalks
+[daniel]: https://www.facebook.com/StaticGold
+[issam]: https://github.com/killix
+[legato]: http://www.legatomontreal.com/
