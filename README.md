@@ -104,6 +104,22 @@ POWERDOWN_TIME=0
 
 [Source](https://www.reddit.com/r/raspberry_pi/comments/3eydc3/how_do_i_disable_sleep_mode_on_my_raspberry_pi/).
 
+#### Install PostgreSQL
+
+PongDome uses a database and use PostgreSQL specific features.
+
+```sh
+apt install postgresql
+```
+
+#### Install [`nvm`][nvm]
+
+[nvm]: https://github.com/creationix/nvm
+
+```sh
+curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+```
+
 ### Application
 
 Clone this repository, for example in `pi` home directory:
@@ -117,11 +133,11 @@ the user `pi`.
 
 In the `app` directory you'll find a `config.json.dist` file. Fill in
 the blanks and save it as `config.json`. Here's an example of what one
-would look like for your development environment:
+would look like, using a `pongdome` database locally:
 
 ```json
 {
-  "pg": "postgres://127.0.0.1:5432/pongdome",
+  "pg": "pongdome",
   "buttons": {
     "player_one": {
       "red": 19,
@@ -136,9 +152,7 @@ would look like for your development environment:
 ```
 
 The following will set you up with the correct Node.js version,
-database, and get an environment running for you.
-
-You need the latest `nvm` version for this to work.
+database, and get an environment running for you:
 
 ```sh
 nvm install
