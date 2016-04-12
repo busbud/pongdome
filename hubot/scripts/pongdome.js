@@ -32,7 +32,7 @@ function getThreadID(res) {
 }
 
 function getName(text) {
-  const match = text.match(/@[a-z0-9]+/i);
+  const match = text.match(/@[^ ,:]+/i);
   if (!match) return;
   return match[0].substr(1);
 }
