@@ -49,7 +49,7 @@ module.exports = robot => {
     const requests = challenges[challengee.name.toLowerCase()] || [];
 
     if (!requests.length) {
-      return res.send('Could not find a challenge to accept.');
+      return res.send('Could not find a challenge here.');
     }
 
     const challenger_name = getName(res.message.text);
@@ -70,7 +70,7 @@ module.exports = robot => {
     }
 
     if (!request) {
-      res.send('Could not find a challenge to accept.');
+      res.send('Could not find a challenge here.');
       return;
     }
 
