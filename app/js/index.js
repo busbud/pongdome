@@ -383,7 +383,6 @@ function buttonHelper(err, value, self, next) {
     self.btnDisabled = true;
     if (hold_time > 1700 && self.button === 'red') {
       endGame();
-      onScoreChanged();
     } else {
       next(self.player);
     }
