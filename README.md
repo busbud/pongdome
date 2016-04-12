@@ -1,6 +1,10 @@
-# ![PongDome](https://cdn.rawgit.com/busbud/pongdome/master/app/images/logo.svg)
+# ![PongDome][pongdome-logo]
 
-![PongDome](https://blog-assets.busbud.com/wp-content/uploads/2015/08/pingpongsetup.png)
+[![PongDome][pongdome-preview]][pongdome-video]
+
+[pongdome-logo]: https://cdn.rawgit.com/busbud/pongdome/master/app/images/logo.svg
+[pongdome-preview]: https://blog-assets.busbud.com/wp-content/uploads/2015/08/pingpongsetup.png
+[pongdome-video]: https://cdn.rawgit.com/busbud/pongdome/assets/pongdome.webm
 
 PongDome is Busbud's *revolutionary* ping pong setup.
 
