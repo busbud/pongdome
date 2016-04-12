@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+# Go in the Hubot directory
+cd "$(dirname "$0")/hubot"
+
+# Example for Flowdock
+export HUBOT_FLOWDOCK_API_TOKEN=your-token
+bin/hubot -a flowdock

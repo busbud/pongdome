@@ -1,6 +1,12 @@
-#!/bin/bash
+#!/bin/sh -e
 
-export DISPLAY=:0
-export NODE_ENV=production
+# Go in the app directory
 cd "$(dirname "$0")"
+
+# Make sure the app runs on the screen
+export DISPLAY=:0
+
+# Production environment (don't want to open development panel)
+export NODE_ENV=production
+
 npm start
