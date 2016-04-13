@@ -6,6 +6,7 @@ const uuid = require('node-uuid');
 const numeral = require('numeral');
 const util = require('util');
 const WebSocketServer = require('ws').Server;
+const config = require('../pongdome');
 
 const port = process.env.PORT || 3030;
 
@@ -26,6 +27,12 @@ class Socket {
 }
 
 util.inherits(Socket, EventEmitter);
+
+function isAdmin(user) {
+  return (config.admins || [])
+    .map(name => name.toLowerCase())
+    .find(name => name === user.toLowerCase());
+}
 
 function getThreadID(res) {
   return res.message.metadata.thread_id || uuid.v4();
@@ -192,7 +199,7 @@ module.exports = robot => {
     const challengerName = request.challenger.name.toLowerCase();
     const challengeeName = request.challengee.name.toLowerCase();
 
-    if (userName !== challengerName && userName !== challengeeName) {
+    if (!isAdmin(userName) && userName !== challengerName && userName !== challengeeName) {
       res.send('This is not your challenge!');
       return;
     }
