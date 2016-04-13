@@ -44,10 +44,7 @@ module.exports = robot => {
   const challenges = {};
   const threads = {};
 
-  function findRequest(res) {
-    const challengee = res.message.user;
-    const requests = challenges[challengee.name.toLowerCase()] || [];
-
+  function findRequest(res, requests) {
     if (!requests.length) {
       return res.send('Could not find a challenge here.');
     }
@@ -74,24 +71,24 @@ module.exports = robot => {
       return;
     }
 
-    if (request.challengee.name.toLowerCase() !== challengee.name.toLowerCase()) {
-      res.send('This is not your challenge!');
-      return;
-    }
-
     return request;
   }
 
   function addRequest(request) {
-    const name = request.challengee.name.toLowerCase();
-    challenges[name] = challenges[name] || [];
-    challenges[name].push(request);
+    const challengerName = request.challenger.name.toLowerCase();
+    const challengeeName = request.challengee.name.toLowerCase();
+    challenges[challengerName] = challenges[challengerName] || [];
+    challenges[challengerName].push(request);
+    challenges[challengeeName] = challenges[challengeeName] || [];
+    challenges[challengeeName].push(request);
     threads[request.thread_id] = request;
   }
 
   function removeRequest(request) {
-    const name = request.challengee.name.toLowerCase();
-    challenges[name] = challenges[name].filter(r => r.thread_id !== request.thread_id);
+    const challengerName = request.challenger.name.toLowerCase();
+    const challengeeName = request.challengee.name.toLowerCase();
+    challenges[challengerName] = challenges[challengerName].filter(r => r.thread_id !== request.thread_id);
+    challenges[challengeeName] = challenges[challengeeName].filter(r => r.thread_id !== request.thread_id);
     delete threads[request.thread_id];
   }
 
@@ -162,8 +159,18 @@ module.exports = robot => {
   });
 
   robot.hear(/#accept/, res => {
-    const request = findRequest(res);
+    const userName = res.message.user.name.toLowerCase();
+    const requests = challenges[userName] || [];
+    const request = findRequest(res, requests);
+
     if (!request) return;
+
+    const challengeeName = request.challengee.name.toLowerCase();
+
+    if (userName !== challengeeName) {
+      res.send('This is not your challenge!');
+      return;
+    }
 
     request.challengee = res.message.user;
     request.accepted = true;
@@ -176,8 +183,19 @@ module.exports = robot => {
   });
 
   robot.hear(/#cancel/, res => {
-    const request = findRequest(res);
+    const userName = res.message.user.name.toLowerCase();
+    const requests = challenges[userName] || [];
+    const request = findRequest(res, requests);
+
     if (!request) return;
+
+    const challengerName = request.challenger.name.toLowerCase();
+    const challengeeName = request.challengee.name.toLowerCase();
+
+    if (userName !== challengerName && userName !== challengeeName) {
+      res.send('This is not your challenge!');
+      return;
+    }
 
     if (request.accepted) {
       socket.send('cancel', { thread_id: request.thread_id });
