@@ -9,6 +9,9 @@ export DISPLAY=:0
 # Production environment (don't want to open development panel)
 export NODE_ENV=production
 
+# Kill running background jobs on exit
+trap 'kill "$(jobs -pr)"' EXIT
+
 # Removes cursor from screen when app is running
 unclutter -idle 0.1 -root &
 
