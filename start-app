@@ -9,4 +9,7 @@ export DISPLAY=:0
 # Production environment (don't want to open development panel)
 export NODE_ENV=production
 
+# Removes cursor from screen when app is running
+unclutter -idle 0.1 -root &
+
 npm start

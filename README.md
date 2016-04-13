@@ -124,6 +124,14 @@ apt install postgresql
 curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 ```
 
+#### Install unclutter
+
+Unclutter removes the mouse cursor from the screen when the app is running.
+
+```sh
+apt install unclutter
+```
+
 ### Application
 
 Clone this repository, for example in `pi` home directory:
