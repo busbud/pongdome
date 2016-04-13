@@ -3,7 +3,6 @@
 const Gpio = process.platform !== 'darwin' && require('onoff').Gpio;
 const moment = require('moment');
 const _ = require('lodash');
-const async = require('async');
 const winston = require('winston');
 const path = require('path');
 
@@ -43,6 +42,14 @@ window.logger.exitOnError = function() {
 const matchHistory = new MatchHistory(config);
 const userRepository = new UserRepository(config);
 const chat = new Chat(config, matchHistory, userRepository);
+
+function updateMatchUpsToday() {
+  matchHistory.matchUpsToday(function(err, res) {
+    if (err) return window.logger.error(err);
+    document.querySelector('#leaderboard .match-ups-today .value').textContent = res;
+    document.querySelector('#scoreboard .match-ups-today .value').textContent = res;
+  });
+}
 
 function updateLeaderboard() {
   const scoreTemplate = _.template(`
@@ -122,14 +129,6 @@ function playerSchema(number) {
       return _.filter(scores, a => a[0] > a[1]).length;
     }
   };
-}
-
-function updateMatchUpsToday() {
-  matchHistory.matchUpsToday(function(err, res) {
-    if (err) return window.logger.error(err);
-    document.querySelector('#leaderboard .match-ups-today .value').textContent = res;
-    document.querySelector('#scoreboard .match-ups-today .value').textContent = res;
-  });
 }
 
 let cancelled_games = [];
@@ -235,6 +234,36 @@ function newGame(match_data) {
   });
 
   updateScoreDisplay();
+}
+
+const queue = [];
+
+function updateIncomingGame() {
+  if (queue.length) {
+    document.querySelector('#incoming-game').style.display = '';
+    document.querySelector('#incoming-game .player1').textContent = queue[0].player_one.name;
+    document.querySelector('#incoming-game .player2').textContent = queue[0].player_two.name;
+  } else {
+    document.querySelector('#incoming-game').style.display = 'none';
+  }
+}
+
+function queueNext() {
+  if (!queue.length) {
+    game_in_progress = false;
+    return;
+  }
+
+  const data = queue.shift();
+
+  if (_.includes(cancelled_games, data.thread_id)) {
+    cancelled_games = _.remove(cancelled_games, id => id !== data.thread_id);
+    return;
+  }
+
+  chat.send('match', { thread_id: data.thread_id });
+  newGame(data);
+  updateIncomingGame();
 }
 
 function resetBoard() {
@@ -430,36 +459,6 @@ function buttonListen() {
   });
 }
 
-const queue = [];
-
-function updateIncomingGame() {
-  if (queue.length) {
-    document.querySelector('#incoming-game').style.display = '';
-    document.querySelector('#incoming-game .player1').textContent = queue[0].player_one.name;
-    document.querySelector('#incoming-game .player2').textContent = queue[0].player_two.name;
-  } else {
-    document.querySelector('#incoming-game').style.display = 'none';
-  }
-}
-
-function queueNext() {
-  if (!queue.length) {
-    game_in_progress = false;
-    return;
-  }
-
-  const data = queue.shift();
-
-  if (_.includes(cancelled_games, data.thread_id)) {
-    cancelled_games = _.remove(cancelled_games, id => id !== data.thread_id);
-    return;
-  }
-
-  chat.send('match', { thread_id: data.thread_id });
-  newGame(data);
-  updateIncomingGame();
-}
-
 function pushQueue(data) {
   queue.push(data);
 
@@ -501,11 +500,13 @@ if (process.platform !== 'darwin') {
 }
 
 function setupMidnightListener() {
-  const midnight = moment().add(1, 'day').startOf('day')
-  const msUntilMidnight = midnight - moment()
+  const midnight = moment().add(1, 'day').startOf('day');
+  const msUntilMidnight = midnight - moment();
 
   setTimeout(() => {
     updateMatchUpsToday();
     setupMidnightListener();
   }, msUntilMidnight);
 }
+
+setupMidnightListener();

@@ -187,6 +187,8 @@ MatchHistory.prototype.getMatchHistory = function(done) {
   const sql = 'SELECT * FROM leaderboard_display';
 
   this._query(sql, [], (err, results) => {
+    if (err) return done(err);
+
     const formatted_results = _.map(results.rows, player => {
       const ratio = Math.round(player.match_wins / (player.match_wins + player.match_losses) * 100) / 100;
 
@@ -221,7 +223,6 @@ MatchHistory.prototype.getMatchHistory = function(done) {
 
 MatchHistory.prototype.gameExists = function(game_id, done) {
   const sql = 'SELECT count(*) FROM history WHERE game_id = $1';
-  const params = [game_id];
 
   this._query(sql, [], (err, results) => {
     if (err) return done(err);

@@ -135,7 +135,7 @@ module.exports = robot => {
 
       data.leaderboard.forEach((player, rank) => {
         table.push([rank + 1, player.name, player.elo, player.wins, player.losses, player.ratio, player.streak]);
-      })
+      });
 
       request.res.send('\n```\n' + table.toString() + '\n```');
     });
@@ -150,7 +150,6 @@ module.exports = robot => {
     }
 
     const challengee = { name: challengee_name };
-    const requests = challenges[challengee.name.toLowerCase()] || [];
     const thread_id = getThreadID(res);
 
     if (threads[thread_id]) {
@@ -217,4 +216,4 @@ module.exports = robot => {
     threads[thread_id] = { res };
     socket.send('leaderboard', { thread_id });
   });
-}
+};
