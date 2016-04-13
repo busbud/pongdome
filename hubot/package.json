@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "postinstall": "if [ ! -f pongdome.json ]; then cp pongdome.json.dist pongdome.json; fi",
     "start": "bin/hubot -a"
   },
   "dependencies": {
