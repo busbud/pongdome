@@ -18,6 +18,7 @@
   "scripts": {
     "build": "git show origin/assets:win.png > app/images/win.png && ln -fs ../../node_modules/{normalize.css,npm-font-open-sans{,-condensed}} app/vendor",
     "db:create": "./tasks/db-create",
+    "leaderboard": "node tasks/leaderboard",
     "lint": "eslint .",
     "postinstall": "npm run build",
     "start": "cd app && electron ."
