@@ -315,7 +315,7 @@ MatchHistory.prototype.playerStats = function(name, done) {
 
 MatchHistory.prototype.lastGame = function(player1, player2, done) {
   const sql = `
-      SELECT *
+      SELECT history.*
         FROM history
         JOIN players winner
           ON winner.id = history.winner_id
