@@ -138,7 +138,7 @@ module.exports = robot => {
       });
 
       request.res.send('\n```\n' + table.toString() + '\n```');
-      removeRequest(request);
+      delete threads[request.thread_id];
     });
   });
 
