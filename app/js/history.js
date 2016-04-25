@@ -271,7 +271,7 @@ MatchHistory.prototype.biggestCrush = function(done) {
                      (SELECT SUM(t) from UNNEST(winner_points) t) as winner_points,
                      (SELECT SUM(t) from UNNEST(loser_points) t) as loser_points
                 FROM history
-               WHERE created_at::date > current_date - interval '1 week'
+               WHERE created_at > date_trunc('week', current_date)
              ) as x
     ORDER BY winner_points - loser_points DESC
        LIMIT 1;
