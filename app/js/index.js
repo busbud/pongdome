@@ -182,8 +182,8 @@ function newGame(match_data) {
   thread_id = match_data.thread_id;
   first_serving = null;
 
-  userRepository.saveUser(match_data.player_one);
-  userRepository.saveUser(match_data.player_two);
+  userRepository.saveUser(match_data.player_one, err => err && window.logger.error(err));
+  userRepository.saveUser(match_data.player_two, err => err && window.logger.error(err));
 
   document.getElementById('leaderboard').style.display = 'none';
   document.getElementById('scoreboard').style.display = 'flex';
