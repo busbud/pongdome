@@ -37,7 +37,7 @@ UserRepository.prototype._saveUser = function(client, user, done) {
   const query = `
     WITH upsert AS (
         UPDATE players SET nick = $2, email = $3, avatar = $4, name = $5, website = $6
-        WHERE user_id = $1 RETURNING *
+        WHERE id = $1 RETURNING *
     )
     INSERT INTO players (id, nick, email, avatar, name, website)
     SELECT $1, $2, $3, $4, $5, $6 WHERE NOT EXISTS (SELECT * FROM upsert)
