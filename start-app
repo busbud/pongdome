@@ -10,7 +10,7 @@ export DISPLAY=:0
 export NODE_ENV=production
 
 # Kill running background jobs on exit
-trap 'kill "$(jobs -pr)"' SIGINT SIGTERM EXIT
+trap 'kill "$(jobs -pr)"' INT TERM EXIT
 
 # Removes cursor from screen when app is running
 unclutter -idle 0.1 -root &
