@@ -213,6 +213,12 @@ function newGame(match_data) {
 
   matchHistory.lastGame(player_one.name, player_two.name, function(err, res) {
     if (err) return window.logger.error(err);
+
+    if (!res) {
+      // No last game
+      return document.querySelector('#last-game .content').innerHTML = '';
+    }
+
     const p1won = res.winner_id === player_one.id;
     const p1pts = p1won ? res.winner_points : res.loser_points;
     const p2pts = p1won ? res.loser_points : res.winner_points;
