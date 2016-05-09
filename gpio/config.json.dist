@@ -1,0 +1,11 @@
+{
+  "api": "http://localhost:4242",
+  "playerOne": {
+    "green": 1,
+    "red": 2
+  },
+  "playerTwo": {
+    "green": 3,
+    "red": 4
+  }
+}

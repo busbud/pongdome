@@ -1,0 +1,179 @@
+<html>
+  <head>
+    <title>PongDome</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="vendor/normalize.css/normalize.css">
+    <link rel="stylesheet" href="vendor/npm-font-open-sans/open-sans.css">
+    <link rel="stylesheet" href="vendor/npm-font-open-sans-condensed/open-sans-condensed.css">
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <div id="leaderboard">
+      <div class="container">
+        <h2>
+          <div class="logo-bg">
+            <img src="img/symbol.svg" alt="PongDome">
+          </div>
+          <div class="line"></div>
+        </h2>
+        <div class="leaderboard">
+          <div class="title">
+            <h3>Leaderboard</h3>
+          </div>
+          <div class="content">
+            <table class="scores-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>ELO</th>
+                  <th>Wins</th>
+                  <th>Losses</th>
+                  <th>Ratio</th>
+                </tr>
+              </thead>
+              <tbody id="scores"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="stats">
+          <div id="winning-streak">
+            <h3>Biggest winning streak</h3>
+            <div class="value"></div>
+            <div class="name"></div>
+          </div>
+          <hr>
+          <div id="consecutive-losses">
+            <h3>Most consecutive losses</h3>
+            <div class="value"></div>
+            <div class="name"></div>
+          </div>
+          <hr>
+          <div id="biggest-crush">
+            <h3>Biggest crush of the week</h3>
+            <div class="content">
+              <div class="player1wins">
+                <div class="value"></div>
+                <div class="name"></div>
+              </div>
+              <div class="dash">-</div>
+              <div class="player2wins">
+                <div class="value"></div>
+                <div class="name"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="winner">
+      <section>
+        <div id="winner-name">Valérian</div>
+        <div id="wins">won</div>
+        <hr>
+        <table>
+          <tbody id="final-score">
+            <tr><td>11</td><td>7</td><td>11</td></tr>
+            <tr><td>9</td><td>11</td><td>4</td></tr>
+          </tbody>
+        </table>
+      </section>
+      <footer>
+        <h2>New ranking</h2>
+        <div class="winner">
+          <h3></h3>
+          <div><span class="rank">Ranked #<span class="value"></span></span> <span class="variation"></span></div>
+          <div class="elo">+<span class="value"></span> elo points</div>
+        </div>
+        <div class="loser">
+          <h3></h3>
+          <div><span class="rank">Ranked #<span class="value"></span></span> <span class="variation"></span></div>
+          <div class="elo">-<span class="value"></span> elo points</div>
+        </div>
+      </footer>
+    </div>
+
+    <div id="scoreboard">
+      <header>
+        <div class="bg">
+          <div class="match-ups-today">
+            <span class="title">Matchs-ups today</span>
+            <span class="value"></span>
+          </div>
+          <div id="incoming-game">
+            <span class="title">Incoming game</span>
+            <span class="player1"></span>
+            <span class="vs">vs</span>
+            <span class="player2"></span>
+          </div>
+        </div>
+      </header>
+      <section>
+        <div id="player1">
+          <div id="player1name-box">
+            <div class="arrow"></div>
+            <div id="player1name"></div>
+            <div class="rank">Ranked #<span class="value"></span></div>
+            <div class="ratio"></div>
+          </div>
+          <div id="player1game1"></div>
+          <div id="player1game2"></div>
+          <div id="player1game3"></div>
+          <div>
+            <div class="service">Serving</div>
+          </div>
+        </div>
+        <div id="player2">
+          <div id="player2name-box">
+            <div class="arrow"></div>
+            <div id="player2name"></div>
+            <div class="rank">Ranked #<span class="value"></span></div>
+            <div class="ratio"></div>
+          </div>
+          <div id="player2game1"></div>
+          <div id="player2game2"></div>
+          <div id="player2game3"></div>
+          <div>
+            <div class="service">Serving</div>
+          </div>
+        </div>
+      </section>
+      <footer>
+        <h2>Stats</h2>
+        <div id="last-game">
+          <div class="title">
+            <h3>Last game</h3>
+          </div>
+          <div class="content">
+            <table>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="head-to-head">
+          <div class="title">
+            <h3>Head to head wins</h3>
+          </div>
+          <div class="content">
+            <div class="player1wins">
+              <div class="value"></div>
+              <div class="name"></div>
+            </div>
+            <div class="dash">-</div>
+            <div class="player2wins">
+              <div class="value"></div>
+              <div class="name"></div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <div id="overlay">
+      <div id="overlay-content"></div>
+    </div>
+
+    <script src="js/bundle.js"></script>
+  </body>
+</html>
