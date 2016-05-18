@@ -191,6 +191,25 @@ export HUBOT_FLOWDOCK_API_TOKEN=your-token
 npm start flowdock
 ```
 
+#### Configuration
+
+The first start will copy `pongdome.json.dist` to `pongdome.json` if it
+doesn't exist.
+
+You can configure the list of admins (that have the power to cancel any
+game) and a room to listen in, if you don't want PongDome to be running
+in all rooms.
+
+```json
+{
+  "admins": ["Dustin", "Valérian"],
+  "room": "pongdome"
+}
+```
+
+The admins are as of Hubot `res.message.user.name`, and room as of
+`res.message.metadata.room`.
+
 ## Testing
 
 To simulate a game, you can call the following functions in the

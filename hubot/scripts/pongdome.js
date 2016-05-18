@@ -142,7 +142,17 @@ module.exports = robot => {
     });
   });
 
-  robot.hear(/#challenge/, res => {
+  function hear(pattern, callback) {
+    robot.hear(pattern, res => {
+      if (config.room && res.message.metadata.room && res.message.metadata.room !== config.room) {
+        return;
+      }
+
+      callback(res);
+    });
+  }
+
+  hear(/#challenge/, res => {
     const challenger = res.message.user;
     const challengee_name = getName(res.message.text);
 
@@ -165,7 +175,7 @@ module.exports = robot => {
     });
   });
 
-  robot.hear(/#accept/, res => {
+  hear(/#accept/, res => {
     const userName = res.message.user.name.toLowerCase();
     const requests = challenges[userName] || [];
     const request = findRequest(res, requests);
@@ -189,7 +199,7 @@ module.exports = robot => {
     });
   });
 
-  robot.hear(/#cancel/, res => {
+  hear(/#cancel/, res => {
     const userName = res.message.user.name.toLowerCase();
     const requests = challenges[userName] || [];
     const request = findRequest(res, requests);
@@ -212,7 +222,7 @@ module.exports = robot => {
     removeRequest(request);
   });
 
-  robot.hear(/#leaderboard/, res => {
+  hear(/#leaderboard/, res => {
     const thread_id = getThreadID(res);
     threads[thread_id] = { res };
     socket.send('leaderboard', { thread_id });
