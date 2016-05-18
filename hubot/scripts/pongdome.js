@@ -222,7 +222,7 @@ module.exports = robot => {
     removeRequest(request);
   });
 
-  hear(/#leaderboard/, res => {
+  hear(/#lead/, res => {
     const thread_id = getThreadID(res);
     threads[thread_id] = { res };
     socket.send('leaderboard', { thread_id });
