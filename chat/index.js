@@ -14,16 +14,24 @@ const matches = {}
 function findRequest (message) {
   const requests = challenges[message.author.id]
 
-  if (!requests || !requests.length) return message.send('Could not find a challenge here.')
+  if (!requests || !requests.length) {
+    message.send('Could not find a challenge here.')
+    return
+  }
 
   const user = bot.mentions(message)[0]
   const threadId = message.raw.thread_id
   let request
 
   if (!user) {
-    if (threadId) request = matches[threadId]
-    else if (requests.length > 1) return message.send('Multiple possible challenges, please mention your partner.')
-    else request = requests.pop()
+    if (threadId) {
+      request = matches[threadId]
+    } else if (requests.length > 1) {
+      message.send('Multiple possible challenges, please mention your partner.')
+      return
+    } else {
+      request = requests.pop()
+    }
   } else {
     request = requests.find(request => {
       return (request.challenger.id === user.id && request.challengee.id === message.author.id) ||
@@ -31,7 +39,10 @@ function findRequest (message) {
     })
   }
 
-  if (!request) return message.send('Could not find a challenge here.')
+  if (!request) {
+    message.send('Could not find a challenge here.')
+    return
+  }
 
   return request
 }
