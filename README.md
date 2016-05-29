@@ -2,7 +2,7 @@
 
 [![PongDome][pongdome-preview]][pongdome-video]
 
-[pongdome-logo]: https://cdn.rawgit.com/busbud/pongdome/master/app/images/logo.svg
+[pongdome-logo]: https://cdn.rawgit.com/busbud/pongdome/master/web/img/logo.svg
 [pongdome-preview]: https://cdn.rawgit.com/busbud/pongdome/assets/preview.jpg
 [pongdome-video]: https://cdn.rawgit.com/busbud/pongdome/assets/pongdome.webm
 
