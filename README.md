@@ -200,11 +200,11 @@ saving matches.
 ```js
 api.emit('match', {
   id: '1234',
-  playerOne: {
+  challenger: {
     id: '1234',
     name: 'Player One'
   },
-  playerTwo: {
+  challengee: {
     id: '4567',
     name: 'Player Two'
   }
