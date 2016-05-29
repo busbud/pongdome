@@ -1,4 +1,4 @@
 {
   "port": "4242",
-  "db": "postgres://pongdome"
+  "db": "pongdome"
 }

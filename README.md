@@ -116,6 +116,9 @@ PongDome uses a database and use PostgreSQL specific features.
 apt install postgresql
 ```
 
+This is an optional step if you want to use a PostgreSQL database
+managed elsewhere (for example on Heroku).
+
 #### Install [`nvm`][nvm]
 
 [nvm]: https://github.com/creationix/nvm
@@ -143,72 +146,35 @@ git clone https://github.com/busbud/pongdome.git
 The rest of this readme assumes this location for `pongdome` and
 the user `pi`.
 
-In the `app` directory you'll find a `config.json.dist` file. Fill in
-the blanks and save it as `config.json`. Here's an example of what one
-would look like, using a `pongdome` database locally:
-
-```json
-{
-  "pg": "pongdome",
-  "buttons": {
-    "player_one": {
-      "red": 19,
-      "green": 26
-    },
-    "player_two": {
-      "red": 16,
-      "green": 20
-    }
-  }
-}
-```
-
-The following will set you up with the correct Node.js version,
-database, and get an environment running for you:
+The following will set you up with the correct Node.js version and
+dependencies.
 
 ```sh
 nvm install
 nvm use
-npm install
-npm run db:create
-npm start
+./install # Installs all the dependencies and copy the default configuration.
 ```
 
-### Hubot
-
-PongDome uses [Hubot][hubot] to communicate with your chat system.
-
-[hubot]: https://hubot.github.com/
-
-Go in the `hubot` directory and run the following, example for using
-Flowdock adapter:
+Update `api/config.json` to set your `db` URL. Also setup the schema with:
 
 ```sh
-nvm use
-npm install
-npm install hubot-flowdock
-export HUBOT_FLOWDOCK_API_TOKEN=your-token
-npm start flowdock
+psql your-db < api/sql/schema.sql
 ```
 
-#### Configuration
+Update `chat/config.js` to use and configure your [stdbot][stdbot]
+adapter. You'll need to `npm install` the stdbot adapter of your choice
+before.
 
-The first start will copy `pongdome.json.dist` to `pongdome.json` if it
-doesn't exist.
+[stdbot]: https://github.com/stdbot/stdbot
 
-You can configure the list of admins (that have the power to cancel any
-game) and a room to listen in, if you don't want PongDome to be running
-in all rooms.
+Update `gpio/config.json` to associate GPIO pins to buttons.
 
-```json
-{
-  "admins": ["Dustin", "Valérian"],
-  "room": "pongdome"
-}
+You can then start everything in an Electron window with:
+
+```sh
+cd electron
+npm start
 ```
-
-The admins are as of Hubot `res.message.user.name`, and room as of
-`res.message.metadata.room`.
 
 ## Testing
 
@@ -222,26 +188,26 @@ game you simulate otherwise you'll start getting database errors when
 saving matches.
 
 ```js
-pushQueue({
-  thread_id: '1234',
-  player_one: {
+api.emit('match', {
+  id: '1234',
+  playerOne: {
     id: '1234',
     name: 'Player One'
   },
-  player_two: {
+  playerTwo: {
     id: '4567',
     name: 'Player Two'
   }
-});
+})
 ```
 
 #### Increment/decrement player
 
-These are the same functions that are called when a button is pressed.
-
 ```js
-incrementPlayer(1);
-decrementPlayer(2);
+api.emit('increment-player-one')
+api.emit('increment-player-two')
+api.emit('decrement-player-one')
+api.emit('decrement-player-two')
 ```
 
 #### End game
@@ -249,12 +215,12 @@ decrementPlayer(2);
 Ends a match and/or game depending on the score.
 
 ```js
-endGame();
+api.emit('end-game')
 ```
 
 ## Auto starting the app on boot
 
-This is done with an `@reboot` entry in the crontab:
+You can do this with an `@reboot` entry in the crontab:
 
 ```sh
 crontab -e
@@ -283,6 +249,7 @@ version, and restart it:
 tmux attach -t app
 ^C
 git pull
+./install
 ./start-app
 ^B D
 ```

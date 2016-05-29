@@ -3,8 +3,13 @@
 # Go in the app directory.
 cd "$(dirname "$0")/"
 
-(cd api && npm install)
-(cd chat && npm install)
-(cd gpio && npm install)
-(cd web && npm install)
-(cd electron && npm install)
+for app in api chat gpio web electron; do
+    (
+        cd "$app"
+        npm install
+
+        if [ -f config.json.dist ] && ! [ -f config.json ]; then
+            cp config.json.dist config.json
+        fi
+    )
+done
