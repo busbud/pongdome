@@ -183,8 +183,7 @@ Update `gpio/config.json` to associate GPIO pins to buttons.
 You can then start everything in an Electron window with:
 
 ```sh
-cd electron
-npm start
+./start-app
 ```
 
 ## Testing
