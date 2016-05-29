@@ -1,0 +1,10 @@
+#!/bin/sh -e
+
+# Go in the app directory.
+cd "$(dirname "$0")/"
+
+(cd api && npm install)
+(cd chat && npm install)
+(cd gpio && npm install)
+(cd web && npm install)
+(cd electron && npm install)

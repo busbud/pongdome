@@ -1,0 +1,22 @@
+{
+  "name": "@busbud/pongdome-electron",
+  "version": "0.1.0",
+  "description": "PongDome Electron application.",
+  "homepage": "https://github.com/busbud/pongdome",
+  "bugs": "https://github.com/busbud/pongdome/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Busbud",
+    "url": "https://www.busbud.com/"
+  },
+  "repository": "busbud/pongdome",
+  "scripts": {
+    "start": "electron --enable-logging ."
+  },
+  "dependencies": {
+    "electron-prebuilt": "^1.1.2"
+  },
+  "devDependencies": {
+    "standard": "^7.0.1"
+  }
+}

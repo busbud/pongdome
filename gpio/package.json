@@ -1,0 +1,24 @@
+{
+  "name": "@busbud/pongdome-gpio",
+  "version": "0.1.0",
+  "description": "PongDome GPIO adapter.",
+  "homepage": "https://github.com/busbud/pongdome",
+  "bugs": "https://github.com/busbud/pongdome/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Busbud",
+    "url": "https://www.busbud.com/"
+  },
+  "repository": "busbud/pongdome",
+  "scripts": {
+    "lint": "standard",
+    "start": "node ."
+  },
+  "dependencies": {
+    "onoff": "^1.1.0",
+    "socket.io-client": "^1.4.5"
+  },
+  "devDependencies": {
+    "standard": "^7.0.1"
+  }
+}

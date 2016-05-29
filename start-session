@@ -1,17 +1,14 @@
 #!/bin/sh -e
 
-# Go in the app directory
+# Go in the app directory.
 cd "$(dirname "$0")"
 
-# Ensure Bash shell
+# Ensure Bash shell.
 export SHELL=bash
 
-# Create a new tmux session named `app`
+# Create a new tmux session named `app`.
 tmux new-session -d -s app
 
-# Allows to get a regular shell without hack when `^C` the app
-tmux send-keys -t app 'nvm use' C-m
-tmux send-keys -t app ./start-hubot C-m
-tmux split-window -t app
+# Allows to get a regular shell without hack when `^C` the app.
 tmux send-keys -t app 'nvm use' C-m
 tmux send-keys -t app ./start-app C-m
