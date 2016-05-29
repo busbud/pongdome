@@ -1,7 +1,7 @@
 {
-  "name": "@busbud/pongdome-api",
+  "name": "@busbud/pongdome",
   "version": "0.1.0",
-  "description": "PongDome API server.",
+  "description": "PongDome shared dependencies and scripts.",
   "homepage": "https://github.com/busbud/pongdome",
   "bugs": "https://github.com/busbud/pongdome/issues",
   "license": "MIT",
@@ -11,10 +11,15 @@
   },
   "repository": "busbud/pongdome",
   "scripts": {
-    "start": "node ."
+    "lint": "standard"
   },
   "dependencies": {
-    "elo-js": "^1.0.1",
-    "pg-promise": "^4.0.10"
+    "socket.io": "^1.4.6"
+  },
+  "devDependencies": {
+    "standard": "^7.0.1"
+  },
+  "standard": {
+    "ignore": ["node_modules/"]
   }
 }

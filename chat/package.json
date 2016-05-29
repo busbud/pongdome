@@ -11,17 +11,12 @@
   },
   "repository": "busbud/pongdome",
   "scripts": {
-    "lint": "standard",
     "start": "node ."
   },
   "dependencies": {
     "cli-table2": "^0.2.0",
     "node-uuid": "^1.4.7",
     "numeral": "^1.5.3",
-    "socket.io-client": "^1.4.5",
     "stdbot": "^0.3.0"
-  },
-  "devDependencies": {
-    "standard": "^7.0.1"
   }
 }

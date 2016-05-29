@@ -11,14 +11,9 @@
   },
   "repository": "busbud/pongdome",
   "scripts": {
-    "lint": "standard",
     "start": "node ."
   },
   "dependencies": {
-    "onoff": "^1.1.0",
-    "socket.io-client": "^1.4.5"
-  },
-  "devDependencies": {
-    "standard": "^7.0.1"
+    "onoff": "^1.1.0"
   }
 }
