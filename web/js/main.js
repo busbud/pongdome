@@ -22,7 +22,13 @@ function onMatch (state) {
   scoreboard.incoming(state.queue[0])
 }
 
-api.on('match', state => winnerScreen ? nextMatch = state : onMatch(state))
+api.on('match', state => {
+  if (winnerScreen) {
+    nextMatch = state
+  } else {
+    onMatch(state)
+  }
+})
 
 api.on('queue', data => {
   if (data.position === 1) {
@@ -56,9 +62,9 @@ api.on('end', data => {
 
 api.on('cancel', data => {
   if (!data.queue.length) {
-      document.querySelector('#scoreboard').style.display = 'none'
-      document.querySelector('#overlay').style.display = 'none'
-      showLeaderboard()
+    document.querySelector('#scoreboard').style.display = 'none'
+    document.querySelector('#overlay').style.display = 'none'
+    showLeaderboard()
   }
 })
 

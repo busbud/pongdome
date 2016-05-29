@@ -21,7 +21,7 @@ app.on('ready', () => {
     title: 'PongDome'
   })
 
-  mainWindow.loadURL('file://' + __dirname + '/../web/index.html')
+  mainWindow.loadURL(`file://${__dirname}/../web/index.html`)
 
   if (process.env.NODE_ENV !== 'production') {
     mainWindow.webContents.openDevTools()
