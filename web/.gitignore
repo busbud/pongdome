@@ -1,6 +1,4 @@
-/node_modules
 /img/win.png
 /js/bundle.js
 /vendor/*
 !/vendor/.gitkeep
-/config.json
