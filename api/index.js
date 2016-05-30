@@ -12,6 +12,7 @@ let queue = []
 
 function saveState () {
   db.query('UPDATE state SET current_match = $1, queue = $2', [JSON.stringify(currentMatch), JSON.stringify(queue)])
+    .catch(console.error)
 }
 
 function newPlayer (player) {
@@ -74,34 +75,33 @@ function endMatch (winner) {
   const match = currentMatch
   currentMatch = null
 
-  db.query('BEGIN')
-    .then(() => Promise.all([
-      c.playerStats(winner),
-      c.playerStats(winner.other),
-      c.savePlayer(winner),
-      c.savePlayer(winner.other)
-    ]))
-    .then(([winnerStats, loserStats]) => {
-      // If player isn't on the leaderboard yet, then ELO defaults to 1000.
-      winnerStats = winnerStats || { wins: 0, losses: 0, elo: 1000, streak: 0 }
-      loserStats = loserStats || { wins: 0, losses: 0, elo: 1000, streak: 0 }
+  db.tx(t => {
+    return t.batch([
+      c.playerStats(t, winner),
+      c.playerStats(t, winner.other),
+      c.savePlayer(t, winner),
+      c.savePlayer(t, winner.other)
+    ])
+      .then(([winnerStats, loserStats]) => {
+        // If player isn't on the leaderboard yet, then ELO defaults to 1000.
+        winnerStats = winnerStats || { wins: 0, losses: 0, elo: 1000, streak: 0 }
+        loserStats = loserStats || { wins: 0, losses: 0, elo: 1000, streak: 0 }
 
-      winner.beforeStats = winnerStats
-      winner.other.beforeStats = loserStats
+        winner.beforeStats = winnerStats
+        winner.other.beforeStats = loserStats
 
-      const winnerElo = elo.ifWins(winnerStats.elo, loserStats.elo)
-      const loserElo = elo.ifLoses(loserStats.elo, winnerStats.elo)
-      const winnerStreak = winnerStats.streak <= 0 ? 1 : winnerStats.streak + 1
-      const loserStreak = loserStats.streak >= 0 ? -1 : loserStats.streak - 1
+        const winnerElo = elo.ifWins(winnerStats.elo, loserStats.elo)
+        const loserElo = elo.ifLoses(loserStats.elo, winnerStats.elo)
+        const winnerStreak = winnerStats.streak <= 0 ? 1 : winnerStats.streak + 1
+        const loserStreak = loserStats.streak >= 0 ? -1 : loserStats.streak - 1
 
-      return Promise.all([
-        c.saveMatch(match.id, winner, winner.other),
-        c.updateLeaderboard(winner, winnerStats.wins + 1, winnerStats.losses, winnerElo, winnerStreak),
-        c.updateLeaderboard(winner.other, loserStats.wins, loserStats.losses + 1, loserElo, loserStreak)
-      ])
-    })
-    .then(() => db.query('COMMIT'))
-    .catch(err => db.query('ROLLBACK').then(() => { throw err }))
+        return t.batch([
+          c.saveMatch(t, match.id, winner, winner.other),
+          c.updateLeaderboard(t, winner, winnerStats.wins + 1, winnerStats.losses, winnerElo, winnerStreak),
+          c.updateLeaderboard(t, winner.other, loserStats.wins, loserStats.losses + 1, loserElo, loserStreak)
+        ])
+      })
+  })
     .then(() => {
       io.emit('end', {
         match,
@@ -261,35 +261,35 @@ io.on('connection', socket => {
   })
 
   socket.on('leaderboard', cb => {
-    c.leaderboard().then(cb)
+    c.leaderboard(db).then(cb)
   })
 
   socket.on('match-ups-today', cb => {
-    c.matchUpsToday().then(cb)
+    c.matchUpsToday(db).then(cb)
   })
 
   socket.on('biggest-winning-streak', cb => {
-    c.biggestWinningStreak().then(cb)
+    c.biggestWinningStreak(db).then(cb)
   })
 
   socket.on('most-consecutive-losses', cb => {
-    c.mostConsecutiveLosses().then(cb)
+    c.mostConsecutiveLosses(db).then(cb)
   })
 
   socket.on('biggest-crush', cb => {
-    c.biggestCrush().then(cb)
+    c.biggestCrush(db).then(cb)
   })
 
   socket.on('head-to-head', (playerOne, playerTwo, cb) => {
-    c.headToHead(playerOne, playerTwo).then(cb)
+    c.headToHead(db, playerOne, playerTwo).then(cb)
   })
 
   socket.on('player-stats', (player, cb) => {
-    c.playerStats(player).then(cb)
+    c.playerStats(db, player).then(cb)
   })
 
   socket.on('last-match', (playerOne, playerTwo, cb) => {
-    c.lastMatch(playerOne, playerTwo).then(cb)
+    c.lastMatch(db, playerOne, playerTwo).then(cb)
   })
 })
 

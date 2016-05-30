@@ -1,22 +1,18 @@
-const db = require('./db')
-
-exports.leaderboard = () =>
+exports.leaderboard = db =>
   db.query('SELECT * FROM leaderboard_display')
 
-exports.matchUpsToday = () =>
-  db.query('SELECT count(*) FROM history WHERE created_at::date = current_date')
-    .then(result => result[0].count)
+exports.matchUpsToday = db =>
+  db.one('SELECT count(*) FROM history WHERE created_at::date = current_date')
+    .then(result => result.count)
 
-exports.biggestWinningStreak = () =>
-  db.query('SELECT * FROM leaderboard_display ORDER BY streak DESC LIMIT 1')
-    .then(result => result[0])
+exports.biggestWinningStreak = db =>
+  db.one('SELECT * FROM leaderboard_display ORDER BY streak DESC LIMIT 1')
 
-exports.mostConsecutiveLosses = () =>
-  db.query('SELECT * FROM leaderboard_display ORDER BY streak LIMIT 1')
-    .then(result => result[0])
+exports.mostConsecutiveLosses = db =>
+  db.one('SELECT * FROM leaderboard_display ORDER BY streak LIMIT 1')
 
-exports.biggestCrush = () =>
-  db.query(`
+exports.biggestCrush = db =>
+  db.one(`
     SELECT *
       FROM (SELECT (SELECT name FROM players WHERE id = winner_id) AS winner_name,
                    (SELECT name FROM players WHERE id = loser_id) AS loser_name,
@@ -28,27 +24,24 @@ exports.biggestCrush = () =>
   ORDER BY winner_points - loser_points DESC
      LIMIT 1
   `)
-    .then(result => result[0])
 
-exports.headToHead = (playerOne, playerTwo) =>
-  db.query(`
+exports.headToHead = (db, playerOne, playerTwo) =>
+  db.one(`
     SELECT (SELECT count(*) FROM history WHERE winner_id = $1 AND loser_id = $2) AS player_one,
            (SELECT count(*) FROM history WHERE winner_id = $2 AND loser_id = $1) AS player_two
   `, [String(playerOne.id), String(playerTwo.id)])
-    .then(result => result[0])
 
-exports.playerStats = player =>
-  db.query(`
+exports.playerStats = (db, player) =>
+  db.one(`
     SELECT *
       FROM (SELECT row_number() OVER (ORDER BY elo DESC) AS rank, *
             FROM leaderboard_display
            ) AS rank
      WHERE player_id = $1
   `, [String(player.id)])
-    .then(result => result[0])
 
-exports.lastMatch = (playerOne, playerTwo) =>
-  db.query(`
+exports.lastMatch = (db, playerOne, playerTwo) =>
+  db.one(`
       SELECT history.*,
              winner.name AS winner_name,
              loser.name AS loser_name
@@ -62,9 +55,8 @@ exports.lastMatch = (playerOne, playerTwo) =>
     ORDER BY created_at DESC
        LIMIT 1
   `, [String(playerOne.id), String(playerTwo.id)])
-    .then(result => result[0])
 
-exports.savePlayer = player =>
+exports.savePlayer = (db, player) =>
   db.query(`
     INSERT INTO players (id, name, meta)
          VALUES ($1, $2, $3)
@@ -74,13 +66,13 @@ exports.savePlayer = player =>
                 meta = $3
   `, [String(player.id), player.name, player.meta])
 
-exports.saveMatch = (id, winner, loser) =>
+exports.saveMatch = (db, id, winner, loser) =>
   db.query(`
     INSERT INTO history (id, winner_id, loser_id, winner_points, loser_points)
          VALUES ($1, $2, $3, $4, $5)
   `, [String(id), String(winner.id), String(loser.id), winner.games, loser.games])
 
-exports.updateLeaderboard = (player, wins, losses, elo, streak) =>
+exports.updateLeaderboard = (db, player, wins, losses, elo, streak) =>
   db.query(`
     INSERT INTO leaderboard (player_id, wins, losses, elo, streak)
          VALUES ($1, $2, $3, $4, $5)
