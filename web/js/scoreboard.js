@@ -77,8 +77,7 @@ exports.reset = () => {
 }
 
 exports.render = match => {
-  if (match.firstServing === true) match.firstServing = match.playerOne
-  else if (match.firstServing === false) match.firstServing = match.playerTwo
+  exports.progress(match)
 
   api.emit('match-ups-today', matches => {
     matchUpsToday.textContent = matches
@@ -121,6 +120,11 @@ exports.render = match => {
       </tr>
     `
   })
+}
+
+exports.progress = match => {
+  if (match.firstServing === true) match.firstServing = match.playerOne
+  else if (match.firstServing === false) match.firstServing = match.playerTwo
 
   if (!match.firstServing) {
     document.querySelector('#overlay').style.display = 'flex'

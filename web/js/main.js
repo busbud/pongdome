@@ -37,7 +37,7 @@ api.on('queue', data => {
 })
 
 api.on('progress', match => {
-  scoreboard.render(match)
+  scoreboard.progress(match)
 })
 
 api.on('end', data => {
