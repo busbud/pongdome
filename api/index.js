@@ -61,7 +61,7 @@ function currentServing (firstServing, playerOne, playerTwo) {
   // Change every two points unless 10-10.
   if (total < 20) total = Math.floor(total / 2)
 
-  const player = total % 2 === 0 ? playerOne : playerTwo
+  const player = total % 2 === 0 ? firstServing : firstServing.other
 
   // Invert first serving every game.
   if (playerOne.games.length % 2 === 0) {
