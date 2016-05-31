@@ -50,8 +50,12 @@ function findRequest (message) {
 function addRequest (request) {
   challenges[request.challenger.id] = challenges[request.challenger.id] || []
   challenges[request.challenger.id].push(request)
-  challenges[request.challengee.id] = challenges[request.challengee.id] || []
-  challenges[request.challengee.id].push(request)
+
+  if (request.challengee) {
+    challenges[request.challengee.id] = challenges[request.challengee.id] || []
+    challenges[request.challengee.id].push(request)
+  }
+
   matches[request.id] = request
 }
 
@@ -68,7 +72,7 @@ function removeRequest ({ id, challenger, challengee }) {
 bot.on('message', message => {
   const match = message.text.match(/(?:^|\s)#([^\s]+)/)
   if (!match) return
-  const hash = match[1]
+  const hash = match[1].toLowerCase()
   if (!actions[hash]) return
   actions[hash]({ socket, bot, findRequest, addRequest, removeRequest, challenges, matches, message })
 })
