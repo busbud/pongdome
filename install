@@ -6,10 +6,15 @@ cd "$(dirname "$0")/"
 for app in . api chat gpio web electron; do
     (
         cd "$app"
-        npm install
 
         if [ -f config.json.dist ] && ! [ -f config.json ]; then
             cp config.json.dist config.json
         fi
+
+        if [ -f config.js.dist ] && ! [ -f config.js ]; then
+            cp config.js.dist config.js
+        fi
+
+        npm install
     )
 done
