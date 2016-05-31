@@ -6,13 +6,13 @@ exports.matchUpsToday = db =>
     .then(result => result.count)
 
 exports.biggestWinningStreak = db =>
-  db.one('SELECT * FROM leaderboard_display ORDER BY streak DESC LIMIT 1')
+  db.oneOrNone('SELECT * FROM leaderboard_display ORDER BY streak DESC LIMIT 1')
 
 exports.mostConsecutiveLosses = db =>
-  db.one('SELECT * FROM leaderboard_display ORDER BY streak LIMIT 1')
+  db.oneOrNone('SELECT * FROM leaderboard_display ORDER BY streak LIMIT 1')
 
 exports.biggestCrush = db =>
-  db.one(`
+  db.oneOrNone(`
     SELECT *
       FROM (SELECT (SELECT name FROM players WHERE id = winner_id) AS winner_name,
                    (SELECT name FROM players WHERE id = loser_id) AS loser_name,
@@ -32,7 +32,7 @@ exports.headToHead = (db, playerOne, playerTwo) =>
   `, [String(playerOne.id), String(playerTwo.id)])
 
 exports.playerStats = (db, player) =>
-  db.one(`
+  db.oneOrNone(`
     SELECT *
       FROM (SELECT row_number() OVER (ORDER BY elo DESC) AS rank, *
             FROM leaderboard_display
@@ -41,7 +41,7 @@ exports.playerStats = (db, player) =>
   `, [String(player.id)])
 
 exports.lastMatch = (db, playerOne, playerTwo) =>
-  db.one(`
+  db.oneOrNone(`
       SELECT history.*,
              winner.name AS winner_name,
              loser.name AS loser_name
