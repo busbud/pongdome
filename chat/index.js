@@ -12,7 +12,7 @@ const challenges = {}
 const matches = {}
 
 function findRequestThread (message) {
-  const request = challenges[message.thread]
+  const request = matches[message.thread]
 
   if (!request) {
     message.send('Could not find a challenge here.')
