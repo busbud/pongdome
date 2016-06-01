@@ -29,13 +29,13 @@ function findRequestUser (message) {
     .map(id => matches[id])
     .filter(request => {
       const isAuthor = request.challenger.id === message.author.id ||
-        request.challengee.id === message.author.id
+        (request.challengee && request.challengee.id === message.author.id)
 
       if (!user) return isAuthor
 
       return isAuthor ||
-          request.challenger.id === user.id
-          request.challengee.id === user.id
+          request.challenger.id === user.id ||
+          (request.challengee && request.challengee.id === user.id)
     })
 
   if (!requests || !requests.length) {
