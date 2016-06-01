@@ -59,7 +59,6 @@ function findRequestUser (message) {
 }
 
 function findRequest (message) {
-  return findRequestUser(message)
   if (message.thread) return findRequestThread(message)
   else return findRequestUser(message)
 }
