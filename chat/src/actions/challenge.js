@@ -1,7 +1,7 @@
 const uuid = require('node-uuid')
 
 const getMatchId = message =>
-  message.raw.thread_id || uuid.v4()
+  message.thread || uuid.v4()
 
 module.exports = function challenge ({ bot, addRequest, matches, message }) {
   const challenger = message.author

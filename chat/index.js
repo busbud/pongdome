@@ -11,33 +11,8 @@ const bot = Stdbot(config.adapter)
 const challenges = {}
 const matches = {}
 
-function findRequest (message) {
-  const requests = challenges[message.author.id]
-
-  if (!requests || !requests.length) {
-    message.send('Could not find a challenge here.')
-    return
-  }
-
-  const user = bot.mentions(message)[0]
-  const threadId = message.raw.thread_id
-  let request
-
-  if (!user) {
-    if (threadId) {
-      request = matches[threadId]
-    } else if (requests.length > 1) {
-      message.send('Multiple possible challenges, please mention your partner.')
-      return
-    } else {
-      request = requests.pop()
-    }
-  } else {
-    request = requests.find(request => {
-      return (request.challenger.id === user.id && request.challengee.id === message.author.id) ||
-        (request.challengee.id === user.id && request.challenger.id === message.author.id)
-    })
-  }
+function findRequestThread (message) {
+  const request = challenges[message.thread]
 
   if (!request) {
     message.send('Could not find a challenge here.')
@@ -45,6 +20,48 @@ function findRequest (message) {
   }
 
   return request
+}
+
+function findRequestUser (message) {
+  const user = bot.mentions(message)[0]
+
+  const requests = Object.keys(matches)
+    .map(id => matches[id])
+    .filter(request => {
+      const isAuthor = request.challenger.id === message.author.id ||
+        request.challengee.id === message.author.id
+
+      if (!user) return isAuthor
+
+      return isAuthor ||
+          request.challenger.id === user.id
+          request.challengee.id === user.id
+    })
+
+  if (!requests || !requests.length) {
+    message.send('Could not find a challenge here.')
+    return
+  }
+
+  if (user) {
+    return requests.find(request => {
+      return (request.challenger.id === user.id && (!request.challenge || request.challengee.id === message.author.id)) ||
+        ((!request.challengee || request.challengee.id === user.id) && request.challenger.id === message.author.id)
+    })
+  }
+
+  if (requests.length > 1) {
+    message.send('Multiple possible challenges, please mention your partner.')
+    return
+  }
+
+  return requests.pop()
+}
+
+function findRequest (message) {
+  return findRequestUser(message)
+  if (message.thread) return findRequestThread(message)
+  else return findRequestUser(message)
 }
 
 function addRequest (request) {
@@ -60,11 +77,15 @@ function addRequest (request) {
 }
 
 function removeRequest ({ id, challenger, challengee }) {
-  challenges[challenger.id] = challenges[challenger.id]
-    .filter(request => request.id !== id)
+  if (challenges[challenger.id]) {
+    challenges[challenger.id] = challenges[challenger.id]
+      .filter(request => request.id !== id)
+  }
 
-  challenges[challengee.id] = challenges[challengee.id]
-    .filter(request => request.id !== id)
+  if (challenges[challengee.id]) {
+    challenges[challengee.id] = challenges[challengee.id]
+      .filter(request => request.id !== id)
+  }
 
   delete matches[id]
 }
