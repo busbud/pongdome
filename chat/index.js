@@ -94,6 +94,7 @@ bot.on('message', message => {
   if (!match) return
   const hash = match[1].toLowerCase()
   if (!actions[hash]) return
+  console.log(`#${hash} ${message.thread}`)
   actions[hash]({ socket, bot, findRequest, addRequest, removeRequest, challenges, matches, message })
 })
 
