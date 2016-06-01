@@ -231,7 +231,7 @@ io.on('connection', socket => {
       currentMatch = null
     } else {
       cancelledMatch = queue.find(match => match.id === id)
-      queue = queue.filter(match => match.id === id)
+      queue = queue.filter(match => match.id !== id)
     }
 
     io.emit('cancel', {
