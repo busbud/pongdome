@@ -52,7 +52,7 @@ exports.render = () => {
 
   api.emit('most-consecutive-losses', data => {
     mostConsecutiveLosses.name.textContent = data.name
-    mostConsecutiveLosses.value.textContent = data.streak * -1 // Assumes data.streak is negative
+    mostConsecutiveLosses.value.textContent = data.streak * -1 // Assumes `data.streak` is negative.
   })
 
   api.emit('biggest-crush', data => {
