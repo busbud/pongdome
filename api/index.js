@@ -239,7 +239,7 @@ io.on('connection', socket => {
       queue
     })
 
-    if (queue.length) {
+    if (!currentMatch && queue.length) {
       currentMatch = queue.shift()
       io.emit('match', { match: currentMatch, queue })
     }
