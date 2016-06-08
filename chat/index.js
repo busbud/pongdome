@@ -1,3 +1,4 @@
+const Table = require('cli-table2')
 const numeral = require('numeral')
 const io = require('socket.io-client')
 const Stdbot = require('stdbot')
@@ -108,6 +109,35 @@ socket.on('match', ({ match }) => {
 socket.on('queue', ({ match, position }) => {
   const { challenger, challengee, message } = matches[match.id]
   message.send(`${bot.mention(challenger)} ${bot.mention(challengee)} Queued Up! You're ${numeral(position).format('0o')} in the queue.`)
+})
+
+socket.on('progress', match => {
+  const request = matches[match.id]
+
+  if (!request.message.edit) return
+
+  const table = new Table({
+    style: { head: [], border: [] }
+  })
+
+  const p1 = match.playerOne
+  const p2 = match.playerTwo
+
+  table.push(
+    [p1.name, ...p1.games, p1.current],
+    [p2.name, ...p2.games, p2.current]
+  )
+
+  const liveScore = '```\n' + table.toString() + '\n```'
+
+  if (request.progress) {
+    request.progress.edit(liveScore)
+  } else {
+    request.message.send(liveScore)
+      .then(message => {
+        request.progress = message
+      })
+  }
 })
 
 socket.on('end', ({ match, winner, loser }) => {
