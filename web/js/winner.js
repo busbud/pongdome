@@ -42,7 +42,7 @@ exports.render = ({ match, winner, loser, beforeStats }) => {
   api.emit('player-stats', loser, stats => {
     loserStats.rank.textContent = stats.rank
     const variation = beforeStats.loser.rank - stats.rank
-    loserStats.variation.textContent = variation ? `(-${variation})` : ''
+    loserStats.variation.textContent = variation ? `(${variation})` : '' // Should be negative, thus already include the minus sign.
     loserStats.elo.textContent = beforeStats.loser.elo - stats.elo
   })
 }
