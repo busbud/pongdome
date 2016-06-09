@@ -131,12 +131,9 @@ socket.on('progress', match => {
   const liveScore = '```\n' + table.toString() + '\n```'
 
   if (request.progress) {
-    request.progress.edit(liveScore)
+    request.progress = request.progress.then(message => message.edit(liveScore))
   } else {
-    request.message.send(liveScore)
-      .then(message => {
-        request.progress = message
-      })
+    request.progress = request.message.send(liveScore)
   }
 })
 
