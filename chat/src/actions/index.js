@@ -5,5 +5,6 @@ module.exports = {
   cancel: require('./cancel'),
   leaderboard: require('./leaderboard'),
   lead: require('./leaderboard'),
-  queue: require('./queue')
+  queue: require('./queue'),
+  cotw: require('./cotw'),
 }
