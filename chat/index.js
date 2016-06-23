@@ -1,4 +1,5 @@
 const Table = require('cli-table2')
+const fs = require('fs')
 const numeral = require('numeral')
 const io = require('socket.io-client')
 const Stdbot = require('stdbot')
@@ -11,6 +12,17 @@ const bot = Stdbot(config.adapter)
 
 const challenges = {}
 const matches = {}
+
+function saveState () {
+  const state = Object.keys(matches).map(key => matches[key])
+  fs.writeFile(`${__dirname}/state.json`, JSON.stringify(state, null, 2))
+}
+
+try {
+  require('./state')
+    .map(request => Object.assign({}, request, { message: bot.formatMessage(request.message) }))
+    .forEach(addRequest)
+} catch (e) {}
 
 function findRequestThread (message) {
   const request = matches[message.thread]
@@ -74,6 +86,8 @@ function addRequest (request) {
   }
 
   matches[request.id] = request
+
+  saveState()
 }
 
 function removeRequest ({ id, challenger, challengee }) {
@@ -88,6 +102,8 @@ function removeRequest ({ id, challenger, challengee }) {
   }
 
   delete matches[id]
+
+  saveState()
 }
 
 bot.on('message', message => {
@@ -96,7 +112,7 @@ bot.on('message', message => {
   const hash = match[1].toLowerCase()
   if (!actions[hash]) return
   console.log(`#${hash} ${message.thread}`)
-  actions[hash]({ socket, bot, findRequest, addRequest, removeRequest, challenges, matches, message })
+  actions[hash]({ socket, bot, saveState, findRequest, addRequest, removeRequest, challenges, matches, message })
 })
 
 bot.on('error', console.error)

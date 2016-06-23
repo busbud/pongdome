@@ -1,4 +1,4 @@
-module.exports = function accept ({ socket, findRequest, message }) {
+module.exports = function accept ({ socket, saveState, findRequest, message }) {
   const request = findRequest(message)
 
   if (!request) return
@@ -9,6 +9,8 @@ module.exports = function accept ({ socket, findRequest, message }) {
   if (message.author.id !== request.challengee.id) return message.send('This is not your challenge.')
 
   request.accepted = true
+
+  saveState()
 
   socket.emit('match', { id, challenger, challengee })
 }
