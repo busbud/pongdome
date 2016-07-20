@@ -12,6 +12,8 @@ module.exports = function cancel ({ socket, findRequest, removeRequest, message 
 
   const { id, challenger, challengee, accepted } = request
 
+  if (request.forced && !isAdmin(message.author)) return message.send('Nope.')
+
   if (!isAdmin(message.author) && ![challenger.id, challengee.id].includes(message.author.id)) {
     return message.send('This is not your challenge!')
   }

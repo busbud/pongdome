@@ -1,6 +1,7 @@
 module.exports = {
   challenge: require('./challenge'),
   openchallenge: require('./openchallenge'),
+  forcechallenge: require('./forcechallenge'),
   accept: require('./accept'),
   cancel: require('./cancel'),
   leaderboard: require('./leaderboard'),
