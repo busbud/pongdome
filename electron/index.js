@@ -1,9 +1,9 @@
-require('../api')
-require('../chat')
+// require('../api')
+// require('../chat')
 
-if (process.platform !== 'darwin') {
-  require('../gpio')
-}
+// if (process.platform !== 'darwin') {
+//   require('../gpio')
+// }
 
 const electron = require('electron')
 const { app } = electron
