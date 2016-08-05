@@ -20,6 +20,7 @@ exports.biggestCrush = db =>
                    (SELECT sum(points) FROM unnest(loser_points) AS points) AS loser_points
               FROM history
              WHERE created_at > date_trunc('week', current_date)
+          ORDER BY created_at DESC
            ) AS games
   ORDER BY winner_points - loser_points DESC
      LIMIT 1
