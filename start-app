@@ -25,7 +25,7 @@ start() {
     (
         cd "$BASE/$1"
 
-        while npm start >> "$BASE/$1.stdout.log" 2>> "$BASE/$1.stderr.log" || true; do
+        while npm start >> "$BASE/log/$1.stdout.log" 2>> "$BASE/log/$1.stderr.log" || true; do
             echo "restarting $1 in 5 seconds"
             sleep 5
         done
