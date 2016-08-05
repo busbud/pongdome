@@ -118,11 +118,13 @@ bot.on('message', message => {
 bot.on('error', console.error)
 
 socket.on('match', ({ match }) => {
+  if (!matches[match.id]) return
   const { challenger, challengee, message } = matches[match.id]
   message.send(`${bot.mention(challenger)} ${bot.mention(challengee)} Game on!`)
 })
 
 socket.on('queue', ({ match, position }) => {
+  if (!matches[match.id]) return
   const { challenger, challengee, message } = matches[match.id]
   message.send(`${bot.mention(challenger)} ${bot.mention(challengee)} Queued Up! You're ${numeral(position).format('0o')} in the queue.`)
 })
@@ -130,6 +132,7 @@ socket.on('queue', ({ match, position }) => {
 socket.on('progress', match => {
   const request = matches[match.id]
 
+  if (!request) return
   if (!request.message.edit) return
 
   const table = new Table({
@@ -154,6 +157,8 @@ socket.on('progress', match => {
 })
 
 socket.on('end', ({ match, winner, loser }) => {
+  if (!matches[match.id]) return
+
   const request = matches[match.id]
   const winnerTotal = winner.games.reduce((a, b) => a + b, 0)
   const loserTotal = loser.games.reduce((a, b) => a + b, 0)
@@ -163,6 +168,8 @@ socket.on('end', ({ match, winner, loser }) => {
 })
 
 socket.on('cancel', ({ match }) => {
+  if (!matches[match.id]) return
+
   const request = matches[match.id]
   request.message.send('Game cancelled.')
   removeRequest(request)
