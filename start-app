@@ -1,23 +1,40 @@
 #!/bin/bash -e
 
-# Go in the Electron directory.
-cd "$(dirname "$0")/electron"
+cd "$(dirname "$0")"
 
-# Make sure the app runs on the screen.
-export DISPLAY=:0
-
-# Prevent screen from sleeping.
-xset s off
-xset -dpms
-xset s noblank
+BASE=$(pwd)
 
 # Production environment (don't want to open development panel).
 export NODE_ENV=production
 
-# Kill running background jobs on exit.
-trap 'kill $(jobs -pr)' INT TERM EXIT
+# Make sure the app runs on the screen.
+export DISPLAY=:0
 
-# Removes cursor from screen when app is running.
+# Kill running background jobs on exit.
+trap 'kill 0' INT TERM EXIT
+
+# # Prevent screen from sleeping.
+xset s off
+xset -dpms
+xset s noblank
+
+# # Removes cursor from screen when app is running.
 unclutter -idle 0.1 -root &
 
-exec npm start
+start() {
+    (
+        cd "$BASE/$1"
+
+        while npm start >> "$BASE/$1.stdout.log" 2>> "$BASE/$1.stderr.log" || true; do
+            echo "restarting $1 in 5 seconds"
+            sleep 5
+        done
+    ) &
+}
+
+start api
+start chat
+start gpio
+start electron
+
+wait
