@@ -8,7 +8,7 @@ const gpioReverse = {
   [config.playerOne.green]: 'player one green',
   [config.playerOne.red]: 'player one red',
   [config.playerTwo.green]: 'player two green',
-  [config.playerTwo.red]: 'player two red',
+  [config.playerTwo.red]: 'player two red'
 }
 
 function onPush (err, value, self, press, hold) {
