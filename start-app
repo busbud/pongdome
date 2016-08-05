@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 # Go in the Electron directory.
 cd "$(dirname "$0")/electron"
@@ -6,13 +6,18 @@ cd "$(dirname "$0")/electron"
 # Make sure the app runs on the screen.
 export DISPLAY=:0
 
+# Prevent screen from sleeping.
+xset s off
+xset -dpms
+xset s noblank
+
 # Production environment (don't want to open development panel).
 export NODE_ENV=production
 
 # Kill running background jobs on exit.
-trap 'kill "$(jobs -pr)"' INT TERM EXIT
+trap 'kill $(jobs -pr)' INT TERM EXIT
 
 # Removes cursor from screen when app is running.
 unclutter -idle 0.1 -root &
 
-npm start
+exec npm start
