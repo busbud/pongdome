@@ -84,3 +84,11 @@ exports.updateLeaderboard = (db, player, wins, losses, elo, streak) =>
                 elo = $4,
                 streak = $5
   `, [String(player.id), wins, losses, elo, streak])
+
+exports.playerByEmail = (db, email) =>
+  db.oneOrNone(`
+    SELECT *
+      FROM players
+     WHERE meta->>'email' = $1
+     LIMIT 1
+  `, [email])

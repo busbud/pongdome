@@ -3,6 +3,7 @@ const io = require('socket.io')()
 const config = require('./config')
 
 const c = require('./src/commands')
+const beacon = require('./src/beacon')
 const db = require('./src/db')
 
 const elo = new Elo()
@@ -291,6 +292,8 @@ io.on('connection', socket => {
   socket.on('last-match', (playerOne, playerTwo, cb) => {
     c.lastMatch(db, playerOne, playerTwo).then(cb)
   })
+
+  beacon(socket)
 })
 
 io.listen(config.port)
