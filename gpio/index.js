@@ -4,8 +4,17 @@ const config = require('./config')
 
 const socket = io(config.api)
 
+const gpioReverse = {
+  [config.playerOne.green]: 'player one green',
+  [config.playerOne.red]: 'player one red',
+  [config.playerTwo.green]: 'player two green',
+  [config.playerTwo.red]: 'player two red',
+}
+
 function onPush (err, value, self, press, hold) {
-  if (err) return console.error(err.stack || err)
+  console.log(self.name, value)
+
+  if (err) return console.error(self.name, err.stack || err)
 
   if (value) self.on = Date.now()
   else self.off = Date.now()
@@ -18,8 +27,10 @@ function onPush (err, value, self, press, hold) {
 
     // If released 1700 milliseconds after pushed, button was held.
     if (holdTime > 1700) {
+      console.log(self.name, 'hold')
       hold && hold()
     } else {
+      console.log(self.name, 'press')
       press()
     }
 
@@ -33,7 +44,7 @@ function onPush (err, value, self, press, hold) {
 }
 
 function button (gpio, press, hold) {
-  const self = { on: 0, off: 0, last: 0, disabled: false }
+  const self = { name: gpioReverse[gpio], on: 0, off: 0, last: 0, disabled: false }
 
   new Gpio(gpio, 'in', 'both')
     .watch((err, value) => {
