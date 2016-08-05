@@ -20,6 +20,8 @@
     "standard": "^7.0.1"
   },
   "standard": {
-    "ignore": ["node_modules/"]
+    "ignore": [
+      "node_modules/"
+    ]
   }
 }
