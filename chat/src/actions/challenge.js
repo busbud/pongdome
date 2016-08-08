@@ -3,7 +3,7 @@ const uuid = require('node-uuid')
 const getMatchId = message =>
   message.thread || uuid.v4()
 
-module.exports = function challenge ({ bot, addRequest, matches, message }) {
+module.exports = function challenge ({ bot, addRequest, matches, message, flags }) {
   const challenger = message.author
   const mentions = bot.mentions(message)
 
@@ -15,5 +15,5 @@ module.exports = function challenge ({ bot, addRequest, matches, message }) {
 
   if (matches[id]) return message.send('There\'s already a challenge here.')
 
-  addRequest({ id, challenger, challengee, message })
+  addRequest({ id, challenger, challengee, message, unranked: flags.forfun })
 }

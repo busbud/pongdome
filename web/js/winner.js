@@ -32,17 +32,26 @@ exports.render = ({ match, winner, loser, beforeStats }) => {
   winnerStats.name.textContent = winner.name
   loserStats.name.textContent = loser.name
 
-  api.emit('player-stats', winner, stats => {
-    winnerStats.rank.textContent = stats.rank
-    const variation = stats.rank - beforeStats.winner.rank
-    winnerStats.variation.textContent = variation ? `(+${variation})` : ''
-    winnerStats.elo.textContent = stats.elo - beforeStats.winner.elo
-  })
+  if (!match.unranked) {
+    api.emit('player-stats', winner, stats => {
+      winnerStats.rank.textContent = stats.rank
+      const variation = stats.rank - beforeStats.winner.rank
+      winnerStats.variation.textContent = variation ? `(+${variation})` : ''
+      winnerStats.elo.textContent = stats.elo - beforeStats.winner.elo
+    })
 
-  api.emit('player-stats', loser, stats => {
-    loserStats.rank.textContent = stats.rank
-    const variation = beforeStats.loser.rank - stats.rank
-    loserStats.variation.textContent = variation ? `(${variation})` : '' // Should be negative, thus already include the minus sign.
-    loserStats.elo.textContent = beforeStats.loser.elo - stats.elo
-  })
+    api.emit('player-stats', loser, stats => {
+      loserStats.rank.textContent = stats.rank
+      const variation = beforeStats.loser.rank - stats.rank
+      loserStats.variation.textContent = variation ? `(${variation})` : '' // Should be negative, thus already include the minus sign.
+      loserStats.elo.textContent = beforeStats.loser.elo - stats.elo
+    })
+  } else {
+    winnerStats.rank.textContent = ''
+    winnerStats.variation.textContent = ''
+    winnerStats.elo.textContent = ''
+    loserStats.rank.textContent = ''
+    loserStats.variation.textContent = ''
+    loserStats.elo.textContent = ''
+  }
 }

@@ -106,13 +106,32 @@ function removeRequest ({ id, challenger, challengee }) {
   saveState()
 }
 
+function matchAll (regex, string) {
+  let match
+  const results = []
+  while ((match = regex.exec(string)) != null) results.push(match)
+  return results
+}
+
 bot.on('message', message => {
-  const match = message.text.match(/(?:^|\s)#([^\s]+)/)
-  if (!match) return
-  const hash = match[1].toLowerCase()
-  if (!actions[hash]) return
-  console.log(`#${hash} ${message.thread}`)
-  actions[hash]({ socket, bot, saveState, findRequest, addRequest, removeRequest, challenges, matches, message })
+  const results = matchAll(/(?:^|[^\w])#(\w+)/g, message.text)
+
+  if (!results.length) return
+
+  const action = results[0][1].toLowerCase()
+
+  if (!actions[action]) return
+
+  const flags = results.slice(1).map(match => match[1])
+
+  const flagsObject = flags.reduce((object, flag) => {
+    object[flag] = true
+    return object
+  }, {})
+
+  console.log(`#${action} ${message.thread} ${flags.map(x => `#${x}`).join(' ')}`)
+
+  actions[action]({ socket, bot, saveState, findRequest, addRequest, removeRequest, challenges, matches, message, flags: flagsObject })
 })
 
 bot.on('error', console.error)
@@ -134,6 +153,7 @@ socket.on('progress', match => {
 
   if (!request) return
   if (!request.message.edit) return
+  if (match.unranked) return
 
   const table = new Table({
     style: { head: [], border: [] }
