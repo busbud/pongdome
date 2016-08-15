@@ -9,7 +9,7 @@ const isAdmin = user =>
 const getMatchId = message =>
   message.thread || uuid.v4()
 
-module.exports = function forcechallenge ({ bot, socket, saveState, addRequest, matches, message }) {
+module.exports = function forcechallenge ({ bot, socket, saveState, addRequest, matches, message, flags }) {
   if (!isAdmin(message.author)) return message.send('Nope.')
 
   const mentions = bot.mentions(message)
@@ -23,11 +23,9 @@ module.exports = function forcechallenge ({ bot, socket, saveState, addRequest, 
 
   if (matches[id]) return message.send('There\'s already a challenge here.')
 
-  console.log(id, challenger, challengee)
-
-  addRequest({ id, challenger, challengee, message, accepted: true, forced: true })
+  addRequest({ id, challenger, challengee, message, accepted: true, forced: true, unranked: flags.forfun })
 
   saveState()
 
-  socket.emit('match', { id, challenger, challengee })
+  socket.emit('match', { id, challenger, challengee, unranked: flags.forfun })
 }

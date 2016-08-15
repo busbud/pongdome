@@ -4,7 +4,7 @@ module.exports = function accept ({ socket, saveState, findRequest, message }) {
   if (!request) return
   if (!request.challengee) request.challengee = message.author
 
-  const { id, challenger, challengee } = request
+  const { id, challenger, challengee, unranked } = request
 
   if (message.author.id !== request.challengee.id) return message.send('This is not your challenge.')
 
@@ -12,5 +12,5 @@ module.exports = function accept ({ socket, saveState, findRequest, message }) {
 
   saveState()
 
-  socket.emit('match', { id, challenger, challengee })
+  socket.emit('match', { id, challenger, challengee, unranked })
 }

@@ -39,10 +39,11 @@ function newMatch (match) {
     playerOne: newPlayer(match.playerOne || match.challenger),
     playerTwo: newPlayer(match.playerTwo || match.challengee),
     firstServing: match.firstServing || null,
+    unranked: match.unranked || false,
     toJSON () {
-      const { id, playerOne, playerTwo } = this
+      const { id, playerOne, playerTwo, unranked } = this
       const firstServing = this.firstServing && this.firstServing === playerOne
-      return { id, playerOne, playerTwo, firstServing }
+      return { id, playerOne, playerTwo, firstServing, unranked }
     }
   }
 
@@ -75,7 +76,7 @@ function endMatch (winner) {
   const match = currentMatch
   currentMatch = null
 
-  db.tx(t => {
+  const save = match.unranked ? Promise.resolve() : db.tx(t => {
     return t.batch([
       c.playerStats(t, winner),
       c.playerStats(t, winner.other),
@@ -102,6 +103,8 @@ function endMatch (winner) {
         ])
       })
   })
+
+  save
     .then(() => {
       io.emit('end', {
         match,
