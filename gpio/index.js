@@ -11,6 +11,10 @@ const gpioReverse = {
   [config.playerTwo.red]: 'player two red'
 }
 
+const state = {
+  menu: false
+}
+
 function onPush (err, value, self, press, hold) {
   console.log(self.name, value)
 
@@ -52,9 +56,17 @@ function button (gpio, press, hold) {
     })
 }
 
-const emit = event => () => socket.emit(event)
+const emit = (event, menuEvent) => () => {
+  if (state.menu && menuEvent) socket.emit(menuEvent)
+  else socket.emit(event)
+}
 
-button(config.playerOne.green, emit('increment-player-one'))
-button(config.playerOne.red, emit('decrement-player-one'), emit('end-game'))
-button(config.playerTwo.green, emit('increment-player-two'))
-button(config.playerTwo.red, emit('decrement-player-two'), emit('end-game'))
+function toggleMenu () {
+  state.menu = !state.menu
+  socket.emit('set-menu-state', state.menu)
+}
+
+button(config.playerOne.green, emit('increment-player-one', 'menu-up'), toggleMenu)
+button(config.playerOne.red, emit('decrement-player-one', 'menu-down'), emit('end-game', 'menu-select'))
+button(config.playerTwo.green, emit('increment-player-two', 'menu-up'), toggleMenu)
+button(config.playerTwo.red, emit('decrement-player-two', 'menu-down'), emit('end-game', 'menu-select'))

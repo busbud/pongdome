@@ -563,7 +563,7 @@ header .bg {
   padding: 0 1em;
 }
 
-#overlay {
+#overlay, #menu-overlay {
   display: none;
   position: fixed;
   top: 0;
@@ -574,9 +574,27 @@ header .bg {
   color: white;
   align-items: center;
   justify-content: center;
+  z-index: 2;
 }
 
 #overlay-content {
   border: 3px solid white;
   padding: .5em 1em;
+}
+
+#menu-overlay ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#menu-overlay li a {
+  display: block;
+  padding: .5em 1em;
+  background: #88e2f2;
+  color: white;
+  text-decoration: none;
+}
+
+#menu-overlay li a:focus {
+  background: #ff9e9e;
 }

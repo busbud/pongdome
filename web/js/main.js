@@ -2,6 +2,7 @@ const api = require('./api')
 const leaderboard = require('./leaderboard')
 const scoreboard = require('./scoreboard')
 const winner = require('./winner')
+const menu = require('./menu')
 
 leaderboard.render()
 
@@ -67,6 +68,11 @@ api.on('cancel', data => {
     showLeaderboard()
   }
 })
+
+api.on('set-menu-state', menu.render)
+api.on('menu-up', menu.up)
+api.on('menu-down', menu.down)
+api.on('menu-select', () => menu.select(api))
 
 api.emit('state', state => {
   if (state.match) {

@@ -294,6 +294,11 @@ io.on('connection', socket => {
   socket.on('last-match', (playerOne, playerTwo, cb) => {
     c.lastMatch(db, playerOne, playerTwo).then(cb)
   })
+
+  socket.on('set-menu-state', state => io.emit('set-menu-state', state))
+  socket.on('menu-up', () => io.emit('menu-up'))
+  socket.on('menu-down', () => io.emit('menu-down'))
+  socket.on('menu-select', () => io.emit('menu-select'))
 })
 
 io.listen(config.port)
