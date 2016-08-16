@@ -8,6 +8,7 @@ const db = require('./src/db')
 const elo = new Elo()
 
 let currentMatch = null
+let lastMatch = null
 let queue = []
 
 function saveState () {
@@ -72,8 +73,25 @@ function currentServing (firstServing, playerOne, playerTwo) {
   }
 }
 
+function startMatch (match) {
+  match = newMatch(match)
+
+  if (!currentMatch) {
+    currentMatch = match
+    io.emit('match', { match: currentMatch, queue })
+  } else {
+    io.emit('queue', {
+      match,
+      position: queue.push(match)
+    })
+  }
+
+  saveState()
+}
+
 function endMatch (winner) {
   const match = currentMatch
+  lastMatch = match
   currentMatch = null
 
   const save = match.unranked ? Promise.resolve() : db.tx(t => {
@@ -198,6 +216,17 @@ function decrementPlayer (player) {
   onProgress()
 }
 
+function rematch (unranked) {
+  const match = currentMatch || lastMatch
+
+  if (!match) return
+
+  startMatch(Object.assign({}, match, {
+    id: `${match.id}:r`,
+    unranked
+  }))
+}
+
 db.query('SELECT * FROM state')
   .then(result => {
     if (result[0].current_match) {
@@ -210,21 +239,7 @@ io.on('connection', socket => {
     cb({ match: currentMatch, queue })
   })
 
-  socket.on('match', match => {
-    match = newMatch(match)
-
-    if (!currentMatch) {
-      currentMatch = match
-      io.emit('match', { match: currentMatch, queue })
-    } else {
-      io.emit('queue', {
-        match,
-        position: queue.push(match)
-      })
-    }
-
-    saveState()
-  })
+  socket.on('match', match => startMatch(match))
 
   socket.on('cancel', ({ id }) => {
     let cancelledMatch
@@ -299,6 +314,9 @@ io.on('connection', socket => {
   socket.on('menu-up', () => io.emit('menu-up'))
   socket.on('menu-down', () => io.emit('menu-down'))
   socket.on('menu-select', () => io.emit('menu-select'))
+
+  socket.on('rematch', () => rematch(false))
+  socket.on('rematch-unranked', () => rematch(true))
 })
 
 io.listen(config.port)

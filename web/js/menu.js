@@ -16,19 +16,15 @@ exports.render = state => {
 exports.up = () => {
   index = index - 1
   if (index < 0) index = items.length - 1
-
-  console.log('up', items, index)
   items[index].focus()
 }
 
 exports.down = () => {
   index = index + 1
   if (index >= items.length - 1) index = 0
-
-  console.log('down', items, index)
   items[index].focus()
 }
 
 exports.select = api => {
-  api.emit(items[index].datalist.event)
+  api.emit(items[index].dataset.event)
 }
