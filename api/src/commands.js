@@ -109,6 +109,7 @@ exports.streak = (db, player) =>
                  SELECT created_at
                    FROM history_lag
                   WHERE ${winning ? 'winner_id' : 'loser_id'} != lead_${winning ? 'winner_id' : 'loser_id'}
+                     OR lead_${winning ? 'winner_id' : 'loser_id'} IS NULL
                   LIMIT 1
                )
         SELECT history.*,
