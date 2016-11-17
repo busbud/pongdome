@@ -27,7 +27,7 @@ buttons.play.addEventListener('click', e => {
   inputs.playerTwo.value = ''
 })
 
-function appendMatch(match, isActive) {
+function appendMatch (match, isActive) {
   const el = document.createElement('tr')
 
   if (isActive) el.style.fontWeight = 'bold'
@@ -59,14 +59,14 @@ function appendMatch(match, isActive) {
   queueContainer.appendChild(el)
 }
 
-function renderState({ match, queue }) {
+function renderState ({ match, queue }) {
   queueContainer.innerHTML = ''
 
   if (match) appendMatch(match, true)
   queue.forEach(match => appendMatch(match))
 }
 
-function refreshState() {
+function refreshState () {
   api.emit('state', renderState)
 }
 
