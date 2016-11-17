@@ -294,6 +294,10 @@ io.on('connection', socket => {
   socket.on('last-match', (playerOne, playerTwo, cb) => {
     c.lastMatch(db, playerOne, playerTwo).then(cb)
   })
+
+  socket.on('streak', (player, cb) => {
+    c.streak(db, player).then(cb)
+  })
 })
 
 io.listen(config.port)

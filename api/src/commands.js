@@ -84,3 +84,42 @@ exports.updateLeaderboard = (db, player, wins, losses, elo, streak) =>
                 elo = $4,
                 streak = $5
   `, [String(player.id), wins, losses, elo, streak])
+
+exports.streak = (db, player) =>
+  db.oneOrNone(`
+      SELECT winner_id
+        FROM history
+       WHERE winner_id = $1
+          OR loser_id = $1
+    ORDER BY created_at DESC
+       LIMIT 1
+  `, [String(player.id)])
+    .then(result => result.winner_id === String(player.id))
+    .then(winning => db.query(`
+          WITH history_lag AS (
+                   SELECT *,
+                          lead(winner_id) OVER (ORDER BY created_at DESC) as lead_winner_id,
+                          lead(loser_id) OVER (ORDER BY created_at DESC) as lead_loser_id
+                     FROM history
+                    WHERE winner_id = $1
+                       OR loser_id = $1
+                 ORDER BY created_at DESC
+               ),
+               streak_start AS (
+                 SELECT created_at
+                   FROM history_lag
+                  WHERE ${winning ? 'winner_id' : 'loser_id'} != lead_${winning ? 'winner_id' : 'loser_id'}
+                  LIMIT 1
+               )
+        SELECT history.*,
+               winner.name AS winner_name,
+               loser.name AS loser_name
+          FROM history
+          JOIN players AS winner
+            ON winner.id = history.winner_id
+          JOIN players AS loser
+            ON loser.id = history.loser_id
+         WHERE ${winning ? 'winner_id' : 'loser_id'} = $1
+           AND created_at >= (SELECT * FROM streak_start)
+      ORDER BY created_at DESC
+    `, [String(player.id)]))
