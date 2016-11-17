@@ -5,7 +5,6 @@ function formatScore (match) {
 }
 
 function formatStreak (player, streak) {
-  console.log(streak)
   const winning = streak[0].winner_id === String(player.id)
 
   const list = streak
