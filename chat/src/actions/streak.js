@@ -11,7 +11,7 @@ function formatStreak (player, streak) {
     .map(match => `* ${winning ? match.loser_name : match.winner_name} (${formatScore(match)})`)
     .join('\n')
 
-  return `${player.name} is on a ${winning ? 'winning' : 'losing'} streak:
+  return `${player.name} is on a ${winning ? 'winning' : 'losing'} streak of ${streak.length}:
 
 ${list}`
 }
