@@ -12,5 +12,8 @@ module.exports = function accept ({ socket, saveState, findRequest, message }) {
 
   saveState()
 
-  socket.emit('match', { id, challenger, challengee, unranked })
+  const emit = () => socket.emit('match', { id, challenger, challengee, unranked })
+
+  if (request.time) request.timer = setTimeout(emit, request.time.getTime() - new Date().getTime())
+  else emit()
 }

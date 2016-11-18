@@ -5,12 +5,12 @@ const isAdmin = user =>
     .map(name => name.toLowerCase())
     .find(name => name === user.name.toLowerCase())
 
-module.exports = function cancel ({ socket, findRequest, removeRequest, message }) {
+module.exports = function cancel ({ socket, findRequest, message }) {
   const request = findRequest(message)
 
   if (!request) return
 
-  const { id, challenger, challengee, accepted } = request
+  const { id, challenger, challengee, accepted, timer } = request
 
   if (request.forced && !isAdmin(message.author)) return message.send('Nope.')
 
@@ -21,4 +21,6 @@ module.exports = function cancel ({ socket, findRequest, removeRequest, message 
   if (accepted) {
     socket.emit('cancel', { id })
   }
+
+  if (timer) clearTimeout(timer)
 }

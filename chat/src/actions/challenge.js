@@ -15,5 +15,5 @@ module.exports = function challenge ({ bot, addRequest, matches, message, flags 
 
   if (matches[id]) return message.send('There\'s already a challenge here.')
 
-  addRequest({ id, challenger, challengee, message, unranked: flags.forfun })
+  addRequest({ id, challenger, challengee, message, unranked: flags.forfun, time })
 }

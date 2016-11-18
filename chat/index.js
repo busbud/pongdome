@@ -76,6 +76,27 @@ function findRequest (message) {
   else return findRequestUser(message)
 }
 
+function findTime (text) {
+  const matches = text.match(/ at (\d+)(:\d+)?/)
+
+  if (!matches) return
+
+  const time = new Date()
+
+  const hours = Number(matches[1])
+  const minutes = matches[2] ? Number(matches[2].slice(1)) : 0
+
+  if (hours < 12 && time.getHours() <= (12 + hours)) {
+    time.setHours(12 + hours)
+  } else {
+    time.setHours(hours)
+  }
+
+  time.setMinutes(minutes)
+
+  return time
+}
+
 function addRequest (request) {
   challenges[request.challenger.id] = challenges[request.challenger.id] || []
   challenges[request.challenger.id].push(request)
@@ -85,12 +106,14 @@ function addRequest (request) {
     challenges[request.challengee.id].push(request)
   }
 
+  request.time = findTime(request.message.text)
+
   matches[request.id] = request
 
   saveState()
 }
 
-function removeRequest ({ id, challenger, challengee }) {
+function removeRequest ({ id, challenger, challengee, timer }) {
   if (challenges[challenger.id]) {
     challenges[challenger.id] = challenges[challenger.id]
       .filter(request => request.id !== id)
