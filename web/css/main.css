@@ -407,7 +407,8 @@ header .bg {
 
 #scoreboard .service {
   display: none;
-  color: #f07319;
+  background-color: #f07319; 
+  color: #ffffff;
   border: 2px solid #f07319;
   padding: .2em 2em;
   text-transform: uppercase;
