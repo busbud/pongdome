@@ -69,82 +69,32 @@ the T-Cobbler area, they'll be the GPIO ports you'll have to listen on.
 
 ### Raspberry Pi
 
-A couple of things needs to be configured on the Raspberry PI for
-PongDome to work properly, mostly settings related to power saving,
-which does not play well with a server that should be up permanently.
+The documentation starts from a [MINIBIAN][minibian] Jessie.
+
+[minibian]: https://minibianpi.wordpress.com/
 
 #### Configure the WiFi
 
-If you're not connected by ethernet, the easiest way to configure the
-WiFi is to use `wicd-curses`:
+Add the following in `/etc/network/interfaces`
 
 ```sh
-apt install wicd-curses
-wicd-curses
+auto wlan0
+iface wlan0 inet dhcp
+wpa-ssid "<ssid>"
+wpa-psk "<pass>"
 ```
 
-Select your network, press right to configure it, and check
-"Automatically connect to this network".
-
-Type your WiFi password below, and press F10 to save.
-
-#### Automatic desktop log in
-
-Since PongDome is meant to run without keyboard/mouse, we need it to
-automatically start a desktop session.
-
-For this, run `raspi-config` as `root`, select `Enable Boot to
-Desktop/Scratch` then `Desktop Log in as user 'pi' at the graphical
-desktop`, and press enter.
-
-See it live on [asciinema](https://asciinema.org/a/cubcwv6esyt9q0n9pofxiyv08).
-
-#### Prevent the screen from sleeping
-
-Add the following to `/etc/lightdm/lightdm.conf`, in the `SeatDefaults`
-section:
-
-```conf
-xserver-command=X -s 0 -dpms
-```
-
-[Source](http://raspberrypi.stackexchange.com/questions/2059/disable-screen-blanking-in-x-windows-on-raspbian).
-
-You also need to set the following in `/etc/kbd/config`:
-
-```conf
-BLANK_TIME=0
-POWERDOWN_TIME=0
-```
-
-[Source](https://www.reddit.com/r/raspberry_pi/comments/3eydc3/how_do_i_disable_sleep_mode_on_my_raspberry_pi/).
-
-#### Install PostgreSQL
-
-PongDome uses a database and use PostgreSQL specific features.
+#### Install dependencies
 
 ```sh
-apt install postgresql
-```
-
-This is an optional step if you want to use a PostgreSQL database
-managed elsewhere (for example on Heroku).
-
-#### Install [`nvm`][nvm]
-
-[nvm]: https://github.com/creationix/nvm
-
-```sh
+apt install xserver-xorg-legacy xinit postgresql unclutter
 curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 ```
 
-#### Install unclutter
-
 Unclutter removes the mouse cursor from the screen when the app is running.
 
-```sh
-apt install unclutter
-```
+We use `xserver-xorg-legacy` to be able to run `xinit` as user instead
+of root.
 
 ### Application
 
@@ -169,7 +119,8 @@ nvm use
 Update `api/config.json` to set your `db` URL. Also setup the schema with:
 
 ```sh
-psql your-db < api/sql/schema.sql
+createdb pongdome
+psql pongdome < api/sql/schema.sql
 ```
 
 Update `chat/config.js` to use and configure your [stdbot][stdbot]
