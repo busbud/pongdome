@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+DISPLAY=:0 xset -dpms

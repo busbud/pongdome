@@ -1,0 +1,2 @@
+0 8 * * 1-5 /home/pi/pongdome/sleep/jour
+0 20 * * 1-5 /home/pi/pongdome/sleep/nuit
