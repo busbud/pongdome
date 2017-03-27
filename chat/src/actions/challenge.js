@@ -1,4 +1,4 @@
-const uuid = require('node-uuid')
+const uuid = require('uuid')
 
 const getMatchId = message =>
   message.thread || uuid.v4()
