@@ -77,7 +77,7 @@ The documentation starts from a [MINIBIAN][minibian] Jessie.
 
 Add the following in `/etc/network/interfaces`
 
-```sh
+```
 auto wlan0
 iface wlan0 inet dhcp
 wpa-ssid "<ssid>"
