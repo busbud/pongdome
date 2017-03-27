@@ -14,6 +14,6 @@
     "start": "electron --enable-logging ."
   },
   "dependencies": {
-    "electron-prebuilt": "^1.1.2"
+    "electron-prebuilt": "^1.4.13"
   }
 }

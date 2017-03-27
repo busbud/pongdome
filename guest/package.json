@@ -19,7 +19,7 @@
     "watchify": "watchify js/main.js -o js/bundle.js"
   },
   "devDependencies": {
-    "browserify": "^13.0.0",
-    "watchify": "^3.7.0"
+    "browserify": "^14.1.0",
+    "watchify": "^3.9.0"
   }
 }

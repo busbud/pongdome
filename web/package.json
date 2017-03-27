@@ -20,13 +20,13 @@
     "watchify": "watchify js/main.js -o js/bundle.js"
   },
   "dependencies": {
-    "moment": "^2.13.0",
-    "normalize.css": "^4.0.0",
-    "npm-font-open-sans": "0.0.3",
-    "npm-font-open-sans-condensed": "0.0.2"
+    "moment": "^2.18.1",
+    "normalize.css": "^6.0.0",
+    "npm-font-open-sans": "1.0.3",
+    "npm-font-open-sans-condensed": "1.0.3"
   },
   "devDependencies": {
-    "browserify": "^13.0.0",
-    "watchify": "^3.7.0"
+    "browserify": "^14.1.0",
+    "watchify": "^3.9.0"
   }
 }

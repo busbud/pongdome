@@ -15,6 +15,6 @@
   },
   "dependencies": {
     "elo-js": "^1.0.1",
-    "pg-promise": "^5.2.6"
+    "pg-promise": "^5.6.4"
   }
 }

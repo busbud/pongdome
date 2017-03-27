@@ -14,10 +14,10 @@
     "lint": "standard"
   },
   "dependencies": {
-    "socket.io": "^1.4.6"
+    "socket.io": "^1.7.3"
   },
   "devDependencies": {
-    "standard": "^7.0.1"
+    "standard": "^9.0.2"
   },
   "standard": {
     "ignore": [
