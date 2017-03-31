@@ -250,10 +250,10 @@ io.on('connection', socket => {
     saveState()
   })
 
-  socket.on('increment-player-one', () => currentMatch && incrementPlayer(currentMatch.playerOne))
-  socket.on('decrement-player-one', () => currentMatch && decrementPlayer(currentMatch.playerOne))
-  socket.on('increment-player-two', () => currentMatch && incrementPlayer(currentMatch.playerTwo))
-  socket.on('decrement-player-two', () => currentMatch && decrementPlayer(currentMatch.playerTwo))
+  socket.on('increment-player-one', () => currentMatch && incrementPlayer(currentMatch.playerOne) || io.emit('wakeup'))
+  socket.on('decrement-player-one', () => currentMatch && decrementPlayer(currentMatch.playerOne) || io.emit('wakeup'))
+  socket.on('increment-player-two', () => currentMatch && incrementPlayer(currentMatch.playerTwo) || io.emit('wakeup'))
+  socket.on('decrement-player-two', () => currentMatch && decrementPlayer(currentMatch.playerTwo) || io.emit('wakeup'))
 
   socket.on('end-game', () => {
     if (!currentMatch) {
