@@ -1,0 +1,16 @@
+{
+  "name": "@busbud/pongdome-screen",
+  "version": "0.1.0",
+  "description": "PongDome screen management daemon.",
+  "homepage": "https://github.com/busbud/pongdome",
+  "bugs": "https://github.com/busbud/pongdome/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Busbud",
+    "url": "https://www.busbud.com/"
+  },
+  "repository": "busbud/pongdome",
+  "scripts": {
+    "start": "node ."
+  }
+}

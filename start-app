@@ -36,5 +36,6 @@ start api
 start chat
 start gpio
 start electron
+start screen
 
 wait
