@@ -4,11 +4,16 @@ function formatScore (match) {
     .join(', ')
 }
 
+function formatDate (date) {
+  return new Date(date).toDateString().split(' ').slice(1).join(' ')
+}
+
 function formatStreak (playerOne, playerTwo, streak) {
   const winning = streak[0].winner_id === String(playerOne.id)
+  const prefix = match => playerTwo ? '' : `**${winning ? match.loser_name : match.winner_name}** `
 
   const list = streak
-    .map(match => `* ${winning ? match.loser_name : match.winner_name} (${formatScore(match)})`)
+    .map(match => `* ${prefix(match)}${formatScore(match)} on *${formatDate(match.created_at)}*`)
     .join('\n')
 
   const against = playerTwo ? ` against ${playerTwo.name}` : ''
