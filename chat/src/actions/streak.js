@@ -4,14 +4,16 @@ function formatScore (match) {
     .join(', ')
 }
 
-function formatStreak (player, streak) {
-  const winning = streak[0].winner_id === String(player.id)
+function formatStreak (playerOne, playerTwo, streak) {
+  const winning = streak[0].winner_id === String(playerOne.id)
 
   const list = streak
     .map(match => `* ${winning ? match.loser_name : match.winner_name} (${formatScore(match)})`)
     .join('\n')
 
-  return `${player.name} is on a ${winning ? 'winning' : 'losing'} streak of ${streak.length}:
+  const against = playerTwo ? ` against ${playerTwo.name}` : ''
+
+  return `${playerOne.name} is on a ${winning ? 'winning' : 'losing'} streak of ${streak.length}${against}:
 
 ${list}`
 }
@@ -19,9 +21,12 @@ ${list}`
 module.exports = function streak ({ bot, socket, message }) {
   const players = bot.mentions(message)
   if (!players.length) players.push(message.author)
-  const player = players[0]
+  const playerOne = players[0]
+  const playerTwo = players[1]
 
-  socket.emit('streak', player, streak => {
-    message.send(formatStreak(player, streak))
-  })
+  const onStreak = streak =>
+    message.send(formatStreak(playerOne, playerTwo, streak))
+
+  if (playerTwo) socket.emit('streak-between', playerOne, playerTwo, onStreak)
+  else socket.emit('streak', playerOne, onStreak)
 }

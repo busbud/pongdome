@@ -96,20 +96,11 @@ exports.streak = (db, player) =>
   `, [String(player.id)])
     .then(result => result.winner_id === String(player.id))
     .then(winning => db.query(`
-          WITH history_lag AS (
-                   SELECT *,
-                          lead(winner_id) OVER (ORDER BY created_at DESC) as lead_winner_id,
-                          lead(loser_id) OVER (ORDER BY created_at DESC) as lead_loser_id
-                     FROM history
-                    WHERE winner_id = $1
-                       OR loser_id = $1
-                 ORDER BY created_at DESC
-               ),
-               streak_start AS (
+          WITH streak_start AS (
                  SELECT created_at
-                   FROM history_lag
-                  WHERE ${winning ? 'winner_id' : 'loser_id'} != lead_${winning ? 'winner_id' : 'loser_id'}
-                     OR lead_${winning ? 'winner_id' : 'loser_id'} IS NULL
+                   FROM history
+                  WHERE ${winning ? 'loser_id' : 'winner_id'} = $1
+               ORDER BY created_at DESC
                   LIMIT 1
                )
         SELECT history.*,
@@ -121,6 +112,39 @@ exports.streak = (db, player) =>
           JOIN players AS loser
             ON loser.id = history.loser_id
          WHERE ${winning ? 'winner_id' : 'loser_id'} = $1
-           AND created_at >= (SELECT * FROM streak_start)
+           AND created_at >= COALESCE((SELECT * FROM streak_start), '1970-01-01')
       ORDER BY created_at DESC
     `, [String(player.id)]))
+
+exports.streakBetween = (db, playerOne, playerTwo) =>
+  db.oneOrNone(`
+      SELECT winner_id
+        FROM history
+       WHERE (winner_id = $1 AND loser_id = $2)
+          OR (winner_id = $2 AND loser_id = $1)
+    ORDER BY created_at DESC
+       LIMIT 1
+  `, [String(playerOne.id), String(playerTwo.id)])
+    .then(result => result.winner_id === String(playerOne.id))
+    .then(playerOneWinning => db.query(`
+          WITH streak_start AS (
+                 SELECT created_at
+                   FROM history
+                  WHERE ${playerOneWinning ? 'loser_id' : 'winner_id'} = $1
+                    AND ${playerOneWinning ? 'winner_id' : 'loser_id'} = $2
+               ORDER BY created_at DESC
+                  LIMIT 1
+               )
+        SELECT history.*,
+               winner.name AS winner_name,
+               loser.name AS loser_name
+          FROM history
+          JOIN players AS winner
+            ON winner.id = history.winner_id
+          JOIN players AS loser
+            ON loser.id = history.loser_id
+         WHERE ${playerOneWinning ? 'winner_id' : 'loser_id'} = $1
+           AND ${playerOneWinning ? 'loser_id' : 'winner_id'} = $2
+           AND created_at >= COALESCE((SELECT * FROM streak_start), '1970-01-01')
+      ORDER BY created_at DESC
+    `, [String(playerOne.id), String(playerTwo.id)]))

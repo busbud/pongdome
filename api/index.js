@@ -298,6 +298,10 @@ io.on('connection', socket => {
   socket.on('streak', (player, cb) => {
     c.streak(db, player).then(cb)
   })
+
+  socket.on('streak-between', (playerOne, playerTwo, cb) => {
+    c.streakBetween(db, playerOne, playerTwo).then(cb)
+  })
 })
 
 io.listen(config.port)
