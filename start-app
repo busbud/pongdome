@@ -13,12 +13,12 @@ export DISPLAY=:0
 # Kill running background jobs on exit.
 trap 'kill 0' INT TERM EXIT
 
-# # Prevent screen from sleeping.
+# Prevent screen from sleeping by itself.
 xset s off
-xset -dpms
 xset s noblank
+xset -dpms
 
-# # Removes cursor from screen when app is running.
+# Removes cursor from screen when app is running.
 unclutter -idle 0.1 -root &
 
 start() {
@@ -35,7 +35,8 @@ start() {
 start api
 start chat
 start gpio
-start electron
 start screen
+
+chromium-browser --kiosk "web/index.html" &
 
 wait

@@ -30,9 +30,7 @@ PongDome is Busbud's *revolutionary* ping pong setup.
 ### Prerequisites
 
 * A [Raspberry Pi][rpi]. Current instructions are tested with the
-  [Raspberry Pi 2 Model B][rpi2b], with [Raspbian][raspbian] Jessie, but
-  we now advise to take the [Raspberry Pi 3 Model B][rpi3b], since it
-  includes WiFi, you won't have to buy an additional WiFi USB adapter.
+  [Raspberry Pi 3 Model B][rpi3b], with [Raspbian Jessie Lite][raspbian].
 * A screen.
 * A [breadboard][breadboard].
 * A [T-Cobbler][t-cobbler].
@@ -42,8 +40,7 @@ PongDome is Busbud's *revolutionary* ping pong setup.
 * 4 [resistors, 2.2k ohm 5%][resistors].
 
 [rpi]: https://www.raspberrypi.org/
-[rpi2b]: https://www.raspberrypi.org/products/raspberry-pi-2-model-b/
-[raspbian]: https://www.raspbian.org/
+[raspbian]: https://www.raspberrypi.org/downloads/raspbian/
 [rpi3b]: https://www.raspberrypi.org/products/raspberry-pi-3-model-b/
 [breadboard]: https://www.adafruit.com/products/64
 [t-cobbler]: https://www.adafruit.com/products/2028
@@ -54,66 +51,161 @@ PongDome is Busbud's *revolutionary* ping pong setup.
 ### Wiring everything together
 
 * Plug the Raspberry PI and the screen to a power outlet.
-* Plug the T-Cobbler to the breadboard.
-* Wire the 3V or 5V pin (usually the first one on the T-Cobbler) to the
-  `+` column on the outer side of the breadboard.
+* Plug the T-Cobbler to the breadboard (make sure the ribbon cable is
+  plugged in the right way, the ribbon should be to the outre side of
+  the Raspberry PI).
+* Wire the 3V to the `+` column on the outer side of the breadboard, and
+  the ground one to the `-` column.
 * Wire one connector of each button to this same `+` column.
-* Put 4 resistors, each one between a unique pin on the T-Cobbler area,
-  and a unique pin on the free area.
-* Wire each button's other connector to a line on the breadboard (pick a
-  unique one on the part not covered by the T-Cobbler where a resistor
-  is plugged).
+* The other connector of each button should go in a unique line not
+  covered by the T-Cobbler on the breadboard. Then on that line, wire a
+  resistor to the GPIO of your choice for that button, and another
+  resistor to the ground.
 
-**Note:** remember the line numbers where you plugged the resistor on
-the T-Cobbler area, they'll be the GPIO ports you'll have to listen on.
+![Diagram][diagram]
 
-### Raspberry Pi
+[diagram]: https://cdn.rawgit.com/busbud/pongdome/assets/diagram.png
 
-The documentation starts from a [MINIBIAN][minibian] Jessie.
+Diagram made using [Fritzing](http://fritzing.org/) with the
+[AdaFruit Library](https://github.com/adafruit/Fritzing-Library).
 
-[minibian]: https://minibianpi.wordpress.com/
+This way of wiring button is from the [onoff module documentation][onoff].
 
-#### Configure the WiFi
+[onoff]: https://github.com/fivdi/onoff#usage
 
-Add the following in `/etc/network/interfaces`
+In that example, the buttons GPIO mapping is the following:
 
-```
-auto wlan0
-iface wlan0 inet dhcp
-wpa-ssid "<ssid>"
-wpa-psk "<pass>"
-```
+* Player one red: #5
+* Player one green: #6
+* Player two red: #20
+* Player two green: #21
 
-#### Install dependencies
+Here's what it looks like on our side (approximately respecting the
+diagram):
 
-```sh
-apt install xserver-xorg-legacy xinit postgresql unclutter
-curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-```
+![Setup 1][setup-1] ![Setup 2][setup-2]
 
-Unclutter removes the mouse cursor from the screen when the app is running.
+[setup-1]: https://cdn.rawgit.com/busbud/pongdome/assets/setup-1.jpg
+[setup-2]: https://cdn.rawgit.com/busbud/pongdome/assets/setup-2.jpg
 
-We use `xserver-xorg-legacy` to be able to run `xinit` as user instead
-of root.
+#### Debugging
 
-### Application
-
-Clone this repository, for example in `pi` home directory:
+Use the following script to watch the status of all GPIOs in near real time:
 
 ```sh
-git clone https://github.com/busbud/pongdome.git
+watch -d -n 0.5 gpio readall
 ```
 
-The rest of this readme assumes this location for `pongdome` and
-the user `pi`.
+This will display a table of all GPIOs, their mode (input/output) and
+current value.
 
-The following will set you up with the correct Node.js version and
-dependencies.
+When the value of a GPIO change, it will be highlighted so it's easier
+to notice.
+
+So you can just run this, and mess with the connections and buttons and
+see how it affects the value read from GPIOs.
+
+### Raspbian
+
+First install [Raspbian Jessie Lite][raspbian] following the
+official [instructions][raspbian-instructions].
+
+[raspbian-instructions]: https://www.raspberrypi.org/documentation/installation/installing-images/README.md
+
+### Configure the WiFi
+
+Connect a screen and a keyboard.
+
+Login with user `pi` and password `raspberry`, and run `sudo su -` to be
+`root`.
+
+Add the following to `/etc/wpa_supplicant/wpa_supplicant.conf` (using
+your WiFi SSID and password):
+
+```
+network={
+  ssid="foo"
+  psk="bar"
+}
+```
+
+Save and run `wpa_cli reconfigure`. After a few seconds, it should be
+connected to your WiFi (check using the `ip address` command).
+
+### Configure SSH
+
+Still as `root`, run `raspi-config`. Go in "Interfacing Options", "SSH",
+and enable SSH remote access.
+
+### Install the needed packages
 
 ```sh
-nvm install
-nvm use
-./install # Installs all the dependencies and copy the default configuration.
+apt install tmux vim git wiringpi postgresql xserver-xorg-legacy xinit chromium-browser unclutter
+```
+
+* `wiringpi` is not needed for PongDome to run but is useful for
+  manipulating GPIOs from the shell using the `gpio` command.
+* Don't install `postgresql` if you want to use an external database.
+* We use `xserver-xorg-legacy` to be able to run `xinit` as user
+  instead of `root`.
+
+Then run `exit` to go back as a regular user where we'll continue the
+installation.
+
+### Extra configuration
+
+If you want to start PongDome from a SSH session, run the following as
+root to allow SSH users to start a X11 session:
+
+```sh
+sed -i '/allowed_users/s/console/anybody/' /etc/X11/Xwrapper.config
+```
+
+**Source:** <http://karuppuswamy.com/wordpress/2010/09/26/how-to-fix-x-user-not-authorized-to-run-the-x-server-aborting/>
+
+To prevent black borders on the screen, run the following as root
+(uncomments the `disable_overscan=1` line in `/boot/config.txt`):
+
+```sh
+sed -i '/disable_overscan/s/#//' /boot/config.txt
+```
+
+**Source:** <http://www.opentechguides.com/how-to/article/raspberry-pi/28/raspi-display-setting.html>
+
+To make sure Chromium takes up the whole screen, set the screen size in
+its preferences (set your proper resolution):
+
+```sh
+echo '{"browser":{"window_placement":{"bottom": 1080,"left": 0,"maximized": true,"right": 1920,"top": 0}}}' > ~/.config/chromium/Default/Preferences
+```
+
+**Source:** <https://askubuntu.com/questions/124564/google-chrome-kiosk-screen-does-not-maximize>
+
+### PongDome
+
+First, clone the repository:
+
+```
+git clone https://github.com/busbud/pongdome
+cd pongdome
+```
+
+We'll install the required Node.js version using [nvm]:
+
+[nvm]: https://github.com/creationix/nvm
+
+```sh
+git clone https://github.com/creationix/nvm ~/.nvm
+echo 'source ~/.nvm/nvm.sh' >> ~/.bashrc # To persistently have nvm in your shell
+source ~/.nvm/nvm.sh # To load nvm now
+nvm install # To install the Node.js version needed by PongDome
+```
+
+Then install the npm dependencies, run build steps, copy default
+configuration:
+
+```sh
+./install
 ```
 
 Update `api/config.json` to set your `db` URL. Also setup the schema with:
@@ -131,10 +223,26 @@ before.
 
 Update `gpio/config.json` to associate GPIO pins to buttons.
 
-You can then start everything in an Electron window with:
+For the diagram shown earlier, it would look like:
+
+```json
+{
+  "api": "http://localhost:4242",
+  "playerOne": {
+    "green": 6,
+    "red": 5
+  },
+  "playerTwo": {
+    "green": 21,
+    "red": 20
+  }
+}
+```
+
+You can then start everything in a kiosk Chromium instance with:
 
 ```sh
-./start-app
+xinit ./start-app
 ```
 
 ## Testing
@@ -162,7 +270,7 @@ api.emit('match', {
 })
 ```
 
-#### Increment/decrement player
+### Increment/decrement player
 
 ```js
 api.emit('increment-player-one')
@@ -171,7 +279,7 @@ api.emit('decrement-player-one')
 api.emit('decrement-player-two')
 ```
 
-#### End game
+### End game
 
 Ends a match and/or game depending on the score.
 
@@ -211,7 +319,7 @@ tmux attach -t app
 ^C
 git pull
 ./install
-./start-app
+xinit ./start-app
 ^B D
 ```
 

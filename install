@@ -3,7 +3,7 @@
 # Go in the app directory.
 cd "$(dirname "$0")/"
 
-for app in . api chat gpio web electron; do
+for app in . api chat gpio screen web; do
     (
         cd "$app"
 
