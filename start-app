@@ -36,6 +36,7 @@ start api
 start chat
 start gpio
 start screen
+start replay
 
 chromium-browser --kiosk --disable-session-crashed-bubble --disable-infobars "web/index.html" &
 

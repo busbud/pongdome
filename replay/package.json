@@ -1,0 +1,19 @@
+{
+  "name": "@busbud/pongdome-replay",
+  "version": "0.1.0",
+  "description": "PongDome replay webcam.",
+  "homepage": "https://github.com/busbud/pongdome",
+  "bugs": "https://github.com/busbud/pongdome/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Busbud",
+    "url": "https://www.busbud.com/"
+  },
+  "repository": "busbud/pongdome",
+  "scripts": {
+    "start": "node ."
+  },
+  "dependencies": {
+    "moment": "^2.18.1"
+  }
+}

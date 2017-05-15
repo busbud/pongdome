@@ -299,6 +299,9 @@ io.on('connection', socket => {
     endGame()
   })
 
+  // Forward video capture request.
+  socket.on('capture', () => io.emit('capture'))
+
   socket.on('leaderboard', cb => {
     c.leaderboard(db).then(cb)
   })

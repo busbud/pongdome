@@ -54,7 +54,7 @@ function button (gpio, press, hold) {
 
 const emit = event => () => socket.emit(event)
 
-button(config.playerOne.green, emit('increment-player-one'))
+button(config.playerOne.green, emit('increment-player-one'), emit('capture'))
 button(config.playerOne.red, emit('decrement-player-one'), emit('end-game'))
-button(config.playerTwo.green, emit('increment-player-two'))
+button(config.playerTwo.green, emit('increment-player-two'), emit('capture'))
 button(config.playerTwo.red, emit('decrement-player-two'), emit('end-game'))
