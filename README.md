@@ -140,7 +140,7 @@ and enable SSH remote access.
 ### Install the needed packages
 
 ```sh
-apt install tmux vim git wiringpi postgresql xserver-xorg-legacy xinit chromium-browser unclutter
+apt install tmux vim git wiringpi postgresql xserver-xorg xserver-xorg-legacy xinit chromium-browser unclutter
 ```
 
 * `wiringpi` is not needed for PongDome to run but is useful for
