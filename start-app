@@ -37,6 +37,6 @@ start chat
 start gpio
 start screen
 
-chromium-browser --kiosk "web/index.html" &
+chromium-browser --kiosk --disable-session-crashed-bubble --disable-infobars "web/index.html" &
 
 wait
