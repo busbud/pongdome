@@ -14,7 +14,7 @@
     "lint": "standard"
   },
   "dependencies": {
-    "socket.io": "^1.7.3"
+    "socket.io": "^2.0.2"
   },
   "devDependencies": {
     "standard": "^9.0.2"
