@@ -203,6 +203,10 @@ db.query('SELECT * FROM state')
     if (result[0].current_match) {
       currentMatch = newMatch(result[0].current_match)
     }
+
+    if (result[0].queue) {
+      queue = result[0].queue.map(match => newMatch(match))
+    }
   })
 
 io.on('connection', socket => {
