@@ -1,4 +1,5 @@
 const Elo = require('elo-js')
+const move = require('lodash-move').default
 const io = require('socket.io')()
 const config = require('./config')
 
@@ -252,6 +253,37 @@ io.on('connection', socket => {
     }
 
     saveState()
+  })
+
+  socket.on('requeue', ({ id, where }, cb) => {
+    if (!currentMatch) return cb({ match: currentMatch, queue })
+
+    let virtualQueue = [currentMatch, ...queue]
+    const matchIndex = virtualQueue.indexOf(virtualQueue.find(match => match.id === id))
+
+    if (matchIndex === -1) return cb({ match: currentMatch, queue })
+
+    let targetIndex
+
+    switch (where) {
+      case 'first': targetIndex = 0; break
+      case 'before': targetIndex = matchIndex - 1; break
+      case 'after': targetIndex = matchIndex + 1; break
+      default: targetIndex = virtualQueue.length - 1; break
+    }
+
+    virtualQueue = move(virtualQueue, matchIndex, targetIndex)
+
+    const previousCurrentMatch = currentMatch
+    currentMatch = virtualQueue.shift()
+    queue = virtualQueue
+
+    saveState()
+    cb({ match: currentMatch, queue })
+
+    if (previousCurrentMatch.id !== currentMatch.id) {
+      io.emit('match', { match: currentMatch, queue })
+    }
   })
 
   socket.on('increment-player-one', () => currentMatch && incrementPlayer(currentMatch.playerOne) || io.emit('wakeup'))

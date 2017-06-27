@@ -15,3 +15,5 @@ module.exports = function queue ({ socket, message }) {
     message.send(formatQueue(state))
   })
 }
+
+module.exports.formatQueue = formatQueue

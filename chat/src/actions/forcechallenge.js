@@ -1,16 +1,11 @@
 const uuid = require('uuid')
 const config = require('../../config')
 
-const isAdmin = user =>
-  (config.admins || [])
-    .map(name => name.toLowerCase())
-    .find(name => name === user.name.toLowerCase())
-
 const getMatchId = message =>
   message.thread || uuid.v4()
 
-module.exports = function forcechallenge ({ bot, socket, saveState, addRequest, matches, message, flags }) {
-  if (!isAdmin(message.author)) return message.send('Nope.')
+module.exports = function forcechallenge ({ bot, socket, saveState, addRequest, matches, message, flags, isAdmin }) {
+  if (!isAdmin) return message.send('Nope.')
 
   const mentions = bot.mentions(message)
 

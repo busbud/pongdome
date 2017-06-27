@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "elo-js": "^1.0.1",
+    "lodash-move": "^1.1.1",
     "pg-promise": "^5.6.4"
   }
 }

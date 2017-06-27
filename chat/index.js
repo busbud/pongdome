@@ -129,9 +129,13 @@ bot.on('message', message => {
     return object
   }, {})
 
+  const isAdmin = (config.admins || [])
+    .map(name => name.toLowerCase())
+    .find(name => name === message.author.name.toLowerCase())
+
   console.log(`#${action} ${message.thread} ${flags.map(x => `#${x}`).join(' ')}`)
 
-  actions[action]({ socket, bot, saveState, findRequest, addRequest, removeRequest, challenges, matches, message, flags: flagsObject })
+  actions[action]({ socket, bot, saveState, findRequest, addRequest, removeRequest, challenges, matches, message, flags: flagsObject, isAdmin })
 })
 
 bot.on('error', console.error)
