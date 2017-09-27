@@ -9,5 +9,6 @@ module.exports = {
   queue: require('./queue'),
   requeue: require('./requeue'),
   cotw: require('./cotw'),
-  streak: require('./streak')
+  streak: require('./streak'),
+  h2h: require('./h2h')
 }
