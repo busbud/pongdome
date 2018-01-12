@@ -1,7 +1,7 @@
 module.exports = function forcechallenge ({ bot, socket, saveState, addRequest, message, flags, isAdmin }) {
   if (!isAdmin) return message.send('Nope.')
 
-  const mentions = bot.mentions(message)
+  const mentions = message.mentions()
 
   if (!mentions.length) return message.send('Could not find who to challenge.')
   if (mentions.length > 2) return message.send('Too much people.')

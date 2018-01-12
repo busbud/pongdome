@@ -24,7 +24,7 @@ ${list}`
 }
 
 module.exports = function streak ({ bot, socket, message }) {
-  const players = bot.mentions(message)
+  const players = message.mentions()
   if (!players.length) players.push(message.author)
   const playerOne = players[0]
   const playerTwo = players[1]

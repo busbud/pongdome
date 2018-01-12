@@ -38,7 +38,7 @@ function findRequestThread (message) {
 }
 
 function findRequestUser (message) {
-  const user = bot.mentions(message)[0]
+  const user = message.mentions()[0]
 
   const requests = Object.keys(matchesById)
     .map(id => matchesById[id])
@@ -131,8 +131,52 @@ function matchAll (regex, string) {
   return results
 }
 
+const wordBoundary = /[ \n\r\t.,'\"\+!?-]/
+
+let botState
+
+bot.on('load', state => botState = state)
+
 bot.on('message', message => {
-  const results = matchAll(/(?:^|[^\w])#(\w+)/g, message.text)
+  let results = matchAll(/(?:^|[^\w])#(\w+)/g, message.text)
+
+  // Flowdock specific code: in a flow.
+  if (message.raw.thread_id) {
+    // Keep only tags that are actual Flowdock tags (will not match tags
+    // inside code blocks and alike). Do it only in a flow because those
+    // are never present in private messages.
+    results = results.filter(match => message.raw.tags.includes(match[1]))
+
+    // In a flow, other users are properly tagged so use the native way.
+    message.mentions = function mentions () {
+      return bot.mentions(message)
+    }
+  }
+
+  // Flowdock specific code: in a private conversation.
+  if (message.raw.to) {
+    // In a private conversation, we can't mention persons, so we need
+    // an alternative way to find users.
+    message.mentions = function mentions () {
+      const matches = message.text.split(wordBoundary)
+        .filter(word => word.startsWith('@'))
+        .map(name => name.substr(1))
+
+      if (!matches.length) return []
+
+      const usersByName = {}
+
+      Object.keys(botState.usersById)
+        .map(id => botState.usersById[id])
+        .forEach(user => {
+          usersByName[user.name.toLowerCase()] = user
+        })
+
+      return matches
+        .map(name => usersByName[name.toLowerCase()])
+        .filter(user => user)
+    }
+  }
 
   if (!results.length) return
 

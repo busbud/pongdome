@@ -1,6 +1,6 @@
 module.exports = function challenge ({ bot, addRequest, message, flags }) {
   const challenger = message.author
-  const mentions = bot.mentions(message)
+  const mentions = message.mentions()
 
   if (!mentions.length) return message.send('Could not find who to challenge.')
   if (mentions.length > 1) return message.send('Cannot challenge multiple people.')

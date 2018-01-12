@@ -1,6 +1,6 @@
 module.exports = function openchallenge ({ bot, addRequest, message, flags }) {
   const challenger = message.author
-  const mentions = bot.mentions(message)
+  const mentions = message.mentions()
 
   if (mentions.length) return message.send('It\'s an open challenge man...')
 
