@@ -1,10 +1,4 @@
-const uuid = require('uuid')
-const config = require('../../config')
-
-const getMatchId = message =>
-  message.thread || uuid.v4()
-
-module.exports = function forcechallenge ({ bot, socket, saveState, addRequest, matches, message, flags, isAdmin }) {
+module.exports = function forcechallenge ({ bot, socket, saveState, addRequest, message, flags, isAdmin }) {
   if (!isAdmin) return message.send('Nope.')
 
   const mentions = bot.mentions(message)
@@ -14,11 +8,8 @@ module.exports = function forcechallenge ({ bot, socket, saveState, addRequest, 
 
   const challenger = mentions.length === 1 ? message.author : mentions.shift()
   const challengee = mentions.shift()
-  const id = getMatchId(message)
 
-  if (matches[id]) return message.send('There\'s already a challenge here.')
-
-  addRequest({ id, challenger, challengee, message, accepted: true, forced: true, unranked: flags.forfun })
+  const { id } = addRequest({ challenger, challengee, message, accepted: true, forced: true, unranked: flags.forfun })
 
   saveState()
 
