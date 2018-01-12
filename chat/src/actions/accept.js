@@ -7,6 +7,7 @@ module.exports = function accept ({ socket, saveState, findRequest, message }) {
   const { id, challenger, challengee, unranked } = request
 
   if (message.author.id !== request.challengee.id) return message.send('This is not your challenge.')
+  if (request.accepted) return message.send('This challenge is already accepted.')
 
   request.accepted = true
 
