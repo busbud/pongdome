@@ -11,6 +11,7 @@ const helpText = `Here's all the PongDome commands:
 * \`#requeue #after\`: put a game one game behind in the queue
 * \`#streak\`: show your own streak
 * \`#streak @player\`: show a player's streak
+* \`#streak @player1 @player2\`: show the streak between two players
 * \`#h2h @player\`: show the head to head wins between a player and you
 * \`#h2h @player1 @player2\`: show the head to head wins between two players
 * \`#cotw\`: show the crush of thre week
