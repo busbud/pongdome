@@ -127,7 +127,16 @@ function endMatch (winner) {
     .catch(console.error)
 }
 
-function endGame () {
+function isSetOver () {
+  const { playerOne, playerTwo } = currentMatch
+
+  return (playerOne.current >= 11 || playerTwo.current >= 11) &&
+    (Math.abs(playerOne.current - playerTwo.current) >= 2)
+}
+
+function endSet () {
+  if (!isSetOver()) return
+
   const { playerOne, playerTwo } = currentMatch
 
   playerOne.games.push(playerOne.current)
@@ -145,13 +154,13 @@ function endGame () {
 
 function onProgress () {
   const { firstServing, playerOne, playerTwo } = currentMatch
-  if ((playerOne.current >= 11 || playerTwo.current >= 11) &&
-      (Math.abs(playerOne.current - playerTwo.current) >= 2)) {
+
+  if (isSetOver()) {
     const winner = playerOne.current > playerTwo.current ? playerOne : playerTwo
 
     // Auto end game if not match game.
     if (winner.wonGames() === 0) {
-      endGame()
+      endSet()
     }
   }
 
