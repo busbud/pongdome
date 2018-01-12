@@ -17,7 +17,7 @@ const matchesByThread = {}
 
 function saveState () {
   const state = Object.keys(matchesById).map(key => matchesById[key])
-  fs.writeFile(`${__dirname}/state.json`, JSON.stringify(state, null, 2))
+  fs.writeFileSync(`${__dirname}/state.json`, JSON.stringify(state, null, 2))
 }
 
 try {
