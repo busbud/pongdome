@@ -11,8 +11,10 @@ module.exports = function requeue ({ socket, findRequest, message, flags, isAdmi
   }
 
   if (flags.first) {
+    if (!isAdmin) return message.send('Nope.')
     socket.emit('requeue', { id: request.id, where: 'first' }, onQueue)
   } else if (flags.before) {
+    if (!isAdmin) return message.send('Nope.')
     socket.emit('requeue', { id: request.id, where: 'before' }, onQueue)
   } else if (flags.after) {
     socket.emit('requeue', { id: request.id, where: 'after' }, onQueue)
