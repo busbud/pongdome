@@ -201,13 +201,15 @@ function decrementPlayer (player) {
 
 db.query('SELECT * FROM state')
   .then(result => {
-    if (result[0].current_match) {
-      currentMatch = newMatch(result[0].current_match)
+    if (!result[0]) {
+      db.query('INSERT INTO state (current_match, queue) VALUES ($1, $2)', ['null', '[]'])
+        .catch(console.error)
     }
 
-    if (result[0].queue) {
-      queue = result[0].queue.map(match => newMatch(match))
-    }
+    const state = result[0] || { current_match: null, queue: [] }
+
+    currentMatch = state.current_match
+    queue = state.queue.map(match => newMatch(match))
   })
 
 io.on('connection', socket => {
