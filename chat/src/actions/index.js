@@ -10,5 +10,6 @@ module.exports = {
   requeue: require('./requeue'),
   cotw: require('./cotw'),
   streak: require('./streak'),
-  h2h: require('./h2h')
+  h2h: require('./h2h'),
+  help: require('./help')
 }
