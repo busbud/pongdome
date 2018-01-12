@@ -1,15 +1,15 @@
 exports.leaderboard = db =>
-  db.query('SELECT * FROM leaderboard_display')
+  db.query('SELECT * FROM leaderboard_display_recent')
 
 exports.matchUpsToday = db =>
   db.one('SELECT count(*) FROM history WHERE created_at::date = current_date')
     .then(result => result.count)
 
 exports.biggestWinningStreak = db =>
-  db.oneOrNone('SELECT * FROM leaderboard_display ORDER BY streak DESC LIMIT 1')
+  db.oneOrNone('SELECT * FROM leaderboard_display_recent ORDER BY streak DESC LIMIT 1')
 
 exports.mostConsecutiveLosses = db =>
-  db.oneOrNone('SELECT * FROM leaderboard_display ORDER BY streak LIMIT 1')
+  db.oneOrNone('SELECT * FROM leaderboard_display_recent ORDER BY streak LIMIT 1')
 
 exports.biggestCrush = db =>
   db.oneOrNone(`

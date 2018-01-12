@@ -31,11 +31,16 @@ CREATE VIEW leaderboard_display
        FROM leaderboard
        JOIN players
          ON players.id = leaderboard.player_id
+   ORDER BY elo DESC;
+
+CREATE VIEW leaderboard_display_recent
+  AS SELECT *
+       FROM leaderboard_display
       WHERE (
                SELECT created_at
                  FROM history
-                WHERE winner_id = leaderboard.player_id
-                   OR loser_id = leaderboard.player_id
+                WHERE winner_id = leaderboard_display.player_id
+                   OR loser_id = leaderboard_display.player_id
              ORDER BY created_at DESC
                 LIMIT 1
             ) > now() - interval '2 weeks'
