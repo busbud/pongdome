@@ -101,8 +101,6 @@ function removeRequest ({ id, challenger, challengee }) {
       .filter(request => request.id !== id)
   }
 
-  delete matches[id]
-
   saveState()
 }
 
