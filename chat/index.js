@@ -3,6 +3,7 @@ const fs = require('fs')
 const numeral = require('numeral')
 const io = require('socket.io-client')
 const Stdbot = require('stdbot')
+const uuid = require('uuid')
 
 const config = require('./config')
 const actions = require('./src/actions')
@@ -11,10 +12,11 @@ const socket = io(config.api)
 const bot = Stdbot(config.adapter)
 
 const challenges = {}
-const matches = {}
+const matchesById = {}
+const matchesByThread = {}
 
 function saveState () {
-  const state = Object.keys(matches).map(key => matches[key])
+  const state = Object.keys(matchesById).map(key => matchesById[key])
   fs.writeFile(`${__dirname}/state.json`, JSON.stringify(state, null, 2))
 }
 
@@ -25,11 +27,11 @@ try {
 } catch (e) {}
 
 function findRequestThread (message) {
-  const request = matches[message.thread]
+  const request = matchesByThread[message.thread]
 
   if (!request) {
     message.send('Could not find a challenge here.')
-    return
+    throw new Error('Could not find a challenge here.')
   }
 
   return request
@@ -38,8 +40,8 @@ function findRequestThread (message) {
 function findRequestUser (message) {
   const user = bot.mentions(message)[0]
 
-  const requests = Object.keys(matches)
-    .map(id => matches[id])
+  const requests = Object.keys(matchesById)
+    .map(id => matchesById[id])
     .filter(request => {
       const isAuthor = request.challenger.id === message.author.id ||
         (request.challengee && request.challengee.id === message.author.id)
@@ -53,7 +55,7 @@ function findRequestUser (message) {
 
   if (!requests || !requests.length) {
     message.send('Could not find a challenge here.')
-    return
+    throw new Error('Could not find a challenge here.')
   }
 
   if (user) {
@@ -65,7 +67,7 @@ function findRequestUser (message) {
 
   if (requests.length > 1) {
     message.send('Multiple possible challenges, please mention your partner.')
-    return
+    throw new Error('Multiple possible challenges, please mention your partner.')
   }
 
   return requests.pop()
@@ -77,6 +79,13 @@ function findRequest (message) {
 }
 
 function addRequest (request) {
+  if (!request.id) request = Object.assign({ id: uuid.v4() }, request)
+
+  if (matchesByThread[request.message.thread]) {
+    request.message.send('There\'s already a challenge here.')
+    throw new Error('There\'s already a challenge here.')
+  }
+
   challenges[request.challenger.id] = challenges[request.challenger.id] || []
   challenges[request.challenger.id].push(request)
 
@@ -85,9 +94,15 @@ function addRequest (request) {
     challenges[request.challengee.id].push(request)
   }
 
-  matches[request.id] = request
+  matchesById[request.id] = request
+
+  if (request.message.thread) {
+    matchesByThread[request.message.thread] = request
+  }
 
   saveState()
+
+  return request
 }
 
 function removeRequest ({ id, challenger, challengee }) {
@@ -100,6 +115,11 @@ function removeRequest ({ id, challenger, challengee }) {
     challenges[challengee.id] = challenges[challengee.id]
       .filter(request => request.id !== id)
   }
+
+  const request = matchesById[id]
+
+  delete matchesById[id]
+  delete matchesByThread[request.message.thread]
 
   saveState()
 }
@@ -133,25 +153,29 @@ bot.on('message', message => {
 
   console.log(`#${action} ${message.thread} ${flags.map(x => `#${x}`).join(' ')}`)
 
-  actions[action]({ socket, bot, saveState, findRequest, addRequest, removeRequest, challenges, matches, message, flags: flagsObject, isAdmin })
+  try {
+    actions[action]({ socket, bot, saveState, findRequest, addRequest, removeRequest, challenges, matchesById, matchesByThread, message, flags: flagsObject, isAdmin })
+  } catch (err) {
+    console.error(err)
+  }
 })
 
 bot.on('error', console.error)
 
 socket.on('match', ({ match }) => {
-  if (!matches[match.id]) return
-  const { challenger, challengee, message } = matches[match.id]
+  if (!matchesById[match.id]) return
+  const { challenger, challengee, message } = matchesById[match.id]
   message.send(`${bot.mention(challenger)} ${bot.mention(challengee)} Game on!`)
 })
 
 socket.on('queue', ({ match, position }) => {
-  if (!matches[match.id]) return
-  const { challenger, challengee, message } = matches[match.id]
+  if (!matchesById[match.id]) return
+  const { challenger, challengee, message } = matchesById[match.id]
   message.send(`${bot.mention(challenger)} ${bot.mention(challengee)} Queued Up! You're ${numeral(position).format('0o')} in the queue.`)
 })
 
 socket.on('progress', match => {
-  const request = matches[match.id]
+  const request = matchesById[match.id]
 
   if (!request) return
   if (!request.message.edit) return
@@ -179,9 +203,9 @@ socket.on('progress', match => {
 })
 
 socket.on('end', ({ match, winner, loser }) => {
-  if (!matches[match.id]) return
+  if (!matchesById[match.id]) return
 
-  const request = matches[match.id]
+  const request = matchesById[match.id]
   const winnerTotal = winner.games.reduce((a, b) => a + b, 0)
   const loserTotal = loser.games.reduce((a, b) => a + b, 0)
 
@@ -190,9 +214,9 @@ socket.on('end', ({ match, winner, loser }) => {
 })
 
 socket.on('cancel', ({ match }) => {
-  if (!matches[match.id]) return
+  if (!matchesById[match.id]) return
 
-  const request = matches[match.id]
+  const request = matchesById[match.id]
   request.message.send('Game cancelled.')
   removeRequest(request)
 })
