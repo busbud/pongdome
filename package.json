@@ -17,7 +17,7 @@
     "socket.io": "^2.0.2"
   },
   "devDependencies": {
-    "standard": "^9.0.2"
+    "standard": "^10.0.3"
   },
   "standard": {
     "ignore": [

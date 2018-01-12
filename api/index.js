@@ -211,8 +211,8 @@ db.query('SELECT * FROM state')
   })
 
 io.on('connection', socket => {
-  socket.on('state', cb => {
-    cb({ match: currentMatch, queue })
+  socket.on('state', f => {
+    f({ match: currentMatch, queue })
   })
 
   socket.on('match', match => {
@@ -255,13 +255,13 @@ io.on('connection', socket => {
     saveState()
   })
 
-  socket.on('requeue', ({ id, where }, cb) => {
-    if (!currentMatch) return cb({ match: currentMatch, queue })
+  socket.on('requeue', ({ id, where }, f) => {
+    if (!currentMatch) return f({ match: currentMatch, queue })
 
     let virtualQueue = [currentMatch, ...queue]
     const matchIndex = virtualQueue.indexOf(virtualQueue.find(match => match.id === id))
 
-    if (matchIndex === -1) return cb({ match: currentMatch, queue })
+    if (matchIndex === -1) return f({ match: currentMatch, queue })
 
     let targetIndex
 
@@ -279,17 +279,17 @@ io.on('connection', socket => {
     queue = virtualQueue
 
     saveState()
-    cb({ match: currentMatch, queue })
+    f({ match: currentMatch, queue })
 
     if (previousCurrentMatch.id !== currentMatch.id) {
       io.emit('match', { match: currentMatch, queue })
     }
   })
 
-  socket.on('increment-player-one', () => currentMatch && incrementPlayer(currentMatch.playerOne) || io.emit('wakeup'))
-  socket.on('decrement-player-one', () => currentMatch && decrementPlayer(currentMatch.playerOne) || io.emit('wakeup'))
-  socket.on('increment-player-two', () => currentMatch && incrementPlayer(currentMatch.playerTwo) || io.emit('wakeup'))
-  socket.on('decrement-player-two', () => currentMatch && decrementPlayer(currentMatch.playerTwo) || io.emit('wakeup'))
+  socket.on('increment-player-one', () => currentMatch ? incrementPlayer(currentMatch.playerOne) : io.emit('wakeup'))
+  socket.on('decrement-player-one', () => currentMatch ? decrementPlayer(currentMatch.playerOne) : io.emit('wakeup'))
+  socket.on('increment-player-two', () => currentMatch ? incrementPlayer(currentMatch.playerTwo) : io.emit('wakeup'))
+  socket.on('decrement-player-two', () => currentMatch ? decrementPlayer(currentMatch.playerTwo) : io.emit('wakeup'))
 
   socket.on('end-game', () => {
     if (!currentMatch) {
@@ -299,44 +299,44 @@ io.on('connection', socket => {
     endGame()
   })
 
-  socket.on('leaderboard', cb => {
-    c.leaderboard(db).then(cb)
+  socket.on('leaderboard', f => {
+    c.leaderboard(db).then(f)
   })
 
-  socket.on('match-ups-today', cb => {
-    c.matchUpsToday(db).then(cb)
+  socket.on('match-ups-today', f => {
+    c.matchUpsToday(db).then(f)
   })
 
-  socket.on('biggest-winning-streak', cb => {
-    c.biggestWinningStreak(db).then(cb)
+  socket.on('biggest-winning-streak', f => {
+    c.biggestWinningStreak(db).then(f)
   })
 
-  socket.on('most-consecutive-losses', cb => {
-    c.mostConsecutiveLosses(db).then(cb)
+  socket.on('most-consecutive-losses', f => {
+    c.mostConsecutiveLosses(db).then(f)
   })
 
-  socket.on('biggest-crush', cb => {
-    c.biggestCrush(db).then(cb)
+  socket.on('biggest-crush', f => {
+    c.biggestCrush(db).then(f)
   })
 
-  socket.on('head-to-head', (playerOne, playerTwo, cb) => {
-    c.headToHead(db, playerOne, playerTwo).then(cb)
+  socket.on('head-to-head', (playerOne, playerTwo, f) => {
+    c.headToHead(db, playerOne, playerTwo).then(f)
   })
 
-  socket.on('player-stats', (player, cb) => {
-    c.playerStats(db, player).then(cb)
+  socket.on('player-stats', (player, f) => {
+    c.playerStats(db, player).then(f)
   })
 
-  socket.on('last-match', (playerOne, playerTwo, cb) => {
-    c.lastMatch(db, playerOne, playerTwo).then(cb)
+  socket.on('last-match', (playerOne, playerTwo, f) => {
+    c.lastMatch(db, playerOne, playerTwo).then(f)
   })
 
-  socket.on('streak', (player, cb) => {
-    c.streak(db, player).then(cb)
+  socket.on('streak', (player, f) => {
+    c.streak(db, player).then(f)
   })
 
-  socket.on('streak-between', (playerOne, playerTwo, cb) => {
-    c.streakBetween(db, playerOne, playerTwo).then(cb)
+  socket.on('streak-between', (playerOne, playerTwo, f) => {
+    c.streakBetween(db, playerOne, playerTwo).then(f)
   })
 })
 

@@ -6,7 +6,7 @@ module.exports = function requeue ({ socket, findRequest, message, flags, isAdmi
   if (!request.accepted) return message.send('This game is not in the queue.')
   if (!isAdmin && ![request.challenger.id, request.challengee.id].includes(message.author.id)) return message.send('This is not your challenge.')
 
-  function onQueue(state) {
+  function onQueue (state) {
     message.send(formatQueue(state))
   }
 
