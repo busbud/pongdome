@@ -192,7 +192,7 @@ function decrementPlayer (player) {
     if (player.games.length > 0) {
       // Only the player who won the last game can pop to the previous game at
       // this point otherwise the game will re-end immediatly.
-      if (player.games[player.games.length - 1] > player.other.games[player.other.games.length - 1]) {
+      if (player.games[player.games.length - 1] >= player.other.games[player.other.games.length - 1]) {
         player.current = player.games.pop()
         player.other.current = player.other.games.pop()
       }
