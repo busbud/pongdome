@@ -285,7 +285,7 @@ io.on('connection', socket => {
 
     virtualQueue = move(virtualQueue, matchIndex, targetIndex)
 
-    const previousCurrentMatch = currentMatch
+    const previousCurrentMatch = newMatch(currentMatch)
     currentMatch = virtualQueue.shift()
     queue = virtualQueue
 
@@ -307,7 +307,7 @@ io.on('connection', socket => {
       return
     }
 
-    endGame()
+    endSet()
   })
 
   socket.on('leaderboard', f => {
