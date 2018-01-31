@@ -9,14 +9,16 @@ function formatDate (date) {
 }
 
 function formatStreak (playerOne, playerTwo, streak) {
+  const against = playerTwo ? ` against ${playerTwo.name}` : ''
+
+  if (!streak.length) return `${playerOne.name} didn't play${against} yet!`
+
   const winning = streak[0].winner_id === String(playerOne.id)
   const prefix = match => playerTwo ? '' : `**${winning ? match.loser_name : match.winner_name}** `
 
   const list = streak
     .map(match => `* ${prefix(match)}${formatScore(match)} on *${formatDate(match.created_at)}*`)
     .join('\n')
-
-  const against = playerTwo ? ` against ${playerTwo.name}` : ''
 
   return `${playerOne.name} is on a ${winning ? 'winning' : 'losing'} streak of ${streak.length}${against}:
 
