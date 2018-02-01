@@ -29,7 +29,7 @@ PongDome is Busbud's *revolutionary* ping pong setup.
 ### Prerequisites
 
 * A [Raspberry Pi][rpi]. Current instructions are tested with the
-  [Raspberry Pi 3 Model B][rpi3b], with [Raspbian Jessie Lite][raspbian].
+  [Raspberry Pi 3 Model B][rpi3b], with [Raspbian Stretch Lite][raspbian].
 * A screen.
 * A [breadboard][breadboard].
 * A [T-Cobbler][t-cobbler].
@@ -106,40 +106,55 @@ see how it affects the value read from GPIOs.
 
 ### Raspbian
 
-First install [Raspbian Jessie Lite][raspbian] following the
+First install [Raspbian Stretch Lite][raspbian] following the
 official [instructions][raspbian-instructions].
 
 [raspbian-instructions]: https://www.raspberrypi.org/documentation/installation/installing-images/README.md
 
-### Configure the WiFi
+### SSH and Wi-Fi
 
-Connect a screen and a keyboard.
+Since it's gonna be a headless Raspberry Pi, we can skip the manual
+setup with a screen and keyboard by automatically enabling SSH and
+configuring Wi-Fi.
 
-Login with user `pi` and password `raspberry`, and run `sudo su -` to be
-`root`.
+According to [this page][headless-pi], we need to put an empty `ssh`
+file on the boot partition of the SD card to enable SSH automatically,
+and a `wpa_supplicant.conf` with the Wi-Fi settings to automatically
+connect to a Wi-Fi network.
 
-Add the following to `/etc/wpa_supplicant/wpa_supplicant.conf` (using
-your WiFi SSID and password):
+[headless-pi]: https://raspberrypi.stackexchange.com/questions/10251/prepare-sd-card-for-wifi-on-headless-pi
+
+Here's what `wpa_supplicant.conf` can look like:
 
 ```
 network={
-  ssid="foo"
-  psk="bar"
+	ssid="your-network"
+	psk="your-password"
 }
 ```
 
-Save and run `wpa_cli reconfigure`. After a few seconds, it should be
-connected to your WiFi (check using the `ip address` command).
+Then, put the SD card in the Raspberry Pi and boot it.
 
-### Configure SSH
+From your machine on the same Wi-Fi network, you can find all the
+Raspberry Pi devices connected to the Wi-Fi network with the following
+command (assuming you're on the `192.168.1.0/24` local network):
 
-Still as `root`, run `raspi-config`. Go in "Interfacing Options", "SSH",
-and enable SSH remote access.
+```sh
+nmap -sP 192.168.1.0/24 | grep -B2 Raspberry
+```
+
+This will perform a host discovery on your network and filter only the
+hosts whose MAC address match the Raspberry Pi Foundation address
+pattern.
+
+That should be enough information for you to know what IP has your
+Raspberry PI. You can then SSH in with default user `pi` and password
+`raspberry`.
 
 ### Install the needed packages
 
 ```sh
-apt install tmux vim git wiringpi postgresql xserver-xorg xserver-xorg-legacy xinit chromium-browser unclutter
+sudo apt install tmux vim git wiringpi postgresql xserver-xorg xserver-xorg-legacy xinit chromium-browser unclutter
 ```
 
 * `wiringpi` is not needed for PongDome to run but is useful for
@@ -147,9 +162,6 @@ apt install tmux vim git wiringpi postgresql xserver-xorg xserver-xorg-legacy xi
 * Don't install `postgresql` if you want to use an external database.
 * We use `xserver-xorg-legacy` to be able to run `xinit` as user
   instead of `root`.
-
-Then run `exit` to go back as a regular user where we'll continue the
-installation.
 
 ### Extra configuration
 
