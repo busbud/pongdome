@@ -23,7 +23,6 @@ PongDome is Busbud's *revolutionary* ping pong setup.
 | [Chat](chat/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=chat)](https://david-dm.org/busbud/pongdome?path=chat) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=chat)](https://david-dm.org/busbud/pongdome?path=chat#info=devDependencies) |
 | [GPIO](gpio/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=gpio)](https://david-dm.org/busbud/pongdome?path=gpio) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=gpio)](https://david-dm.org/busbud/pongdome?path=gpio#info=devDependencies) |
 | [Web](web/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=web)](https://david-dm.org/busbud/pongdome?path=web) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=web)](https://david-dm.org/busbud/pongdome?path=web#info=devDependencies) |
-| [Electron](electron/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=electron)](https://david-dm.org/busbud/pongdome?path=electron) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=electron)](https://david-dm.org/busbud/pongdome?path=electron#info=devDependencies) |
 
 ## Setup
 
