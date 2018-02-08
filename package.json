@@ -1,6 +1,6 @@
 {
   "name": "@busbud/pongdome",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "PongDome shared dependencies and scripts.",
   "homepage": "https://github.com/busbud/pongdome",
   "bugs": "https://github.com/busbud/pongdome/issues",
@@ -14,14 +14,14 @@
     "lint": "standard"
   },
   "dependencies": {
-    "socket.io": "^2.0.2"
+    "debug": "^3.1.0",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4"
   },
   "devDependencies": {
     "standard": "^10.0.3"
   },
-  "standard": {
-    "ignore": [
-      "node_modules/"
-    ]
+  "engines": {
+    "node": "^8.0.0"
   }
 }

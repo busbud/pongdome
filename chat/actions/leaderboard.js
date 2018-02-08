@@ -13,8 +13,8 @@ function formatLeaderboard (leaderboard) {
   return '```\n' + table.toString() + '\n```'
 }
 
-module.exports = function leaderboard ({ socket, message }) {
-  socket.emit('leaderboard', leaderboard => {
+module.exports = function leaderboard ({ api, message }) {
+  api.emit('leaderboard', leaderboard => {
     message.send(formatLeaderboard(leaderboard))
   })
 }

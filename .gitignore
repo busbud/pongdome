@@ -1,5 +1,2 @@
-/log/*
-!/log/.gitkeep
 node_modules/
-config.js
 config.json

@@ -1,4 +1,4 @@
 {
-  "port": "4242",
-  "db": "pongdome"
+  "PORT": "4242",
+  "DATABASE_URL": "pongdome"
 }

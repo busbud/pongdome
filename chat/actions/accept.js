@@ -1,4 +1,4 @@
-module.exports = function accept ({ socket, saveState, findRequest, message }) {
+module.exports = function accept ({ api, saveState, findRequest, message }) {
   const request = findRequest(message)
 
   if (!request) return
@@ -13,5 +13,5 @@ module.exports = function accept ({ socket, saveState, findRequest, message }) {
 
   saveState()
 
-  socket.emit('match', { id, challenger, challengee, unranked })
+  api.emit('match', { id, challenger, challengee, unranked })
 }

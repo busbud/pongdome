@@ -1,14 +1,6 @@
 {
-  "name": "@busbud/pongdome-chat",
-  "version": "0.1.0",
   "description": "PongDome chat adapter.",
-  "homepage": "https://github.com/busbud/pongdome",
-  "bugs": "https://github.com/busbud/pongdome/issues",
   "license": "MIT",
-  "author": {
-    "name": "Busbud",
-    "url": "https://www.busbud.com/"
-  },
   "repository": "busbud/pongdome",
   "scripts": {
     "start": "node ."
@@ -17,7 +9,6 @@
     "cli-table2": "^0.2.0",
     "numeral": "^2.0.6",
     "stdbot": "^0.4.0",
-    "stdbot-flowdock": "^0.4.3",
-    "uuid": "^3.0.1"
+    "uuid": "^3.2.1"
   }
 }

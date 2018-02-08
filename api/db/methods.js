@@ -1,3 +1,9 @@
+exports.getState = db =>
+  db.oneOrNone('SELECT * FROM state')
+
+exports.setState = (db, currentMatch, queue) =>
+  db.query('UPDATE state SET current_match = $1, queue = $2', [JSON.stringify(currentMatch), JSON.stringify(queue)])
+
 exports.leaderboard = db =>
   db.query('SELECT * FROM leaderboard_display_recent')
 

@@ -10,8 +10,8 @@ function formatQueue ({ match, queue }) {
   return [currentMessage, ...queueMessages].join('\n')
 }
 
-module.exports = function queue ({ socket, message }) {
-  socket.emit('state', state => {
+module.exports = function queue ({ api, message }) {
+  api.emit('state', state => {
     message.send(formatQueue(state))
   })
 }

@@ -11,10 +11,6 @@ for app in . api chat gpio screen web; do
             cp config.json.dist config.json
         fi
 
-        if [ -f config.js.dist ] && ! [ -f config.js ]; then
-            cp config.js.dist config.js
-        fi
-
         npm install
     )
 done

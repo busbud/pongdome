@@ -1,3 +1,4 @@
 {
-  "api": "http://localhost:4242"
+  "API_URL": "http://localhost:4242",
+  "SLEEP_TIMEOUT": "60000"
 }

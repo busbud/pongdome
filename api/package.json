@@ -1,14 +1,6 @@
 {
-  "name": "@busbud/pongdome-api",
-  "version": "0.1.0",
   "description": "PongDome API server.",
-  "homepage": "https://github.com/busbud/pongdome",
-  "bugs": "https://github.com/busbud/pongdome/issues",
   "license": "MIT",
-  "author": {
-    "name": "Busbud",
-    "url": "https://www.busbud.com/"
-  },
   "repository": "busbud/pongdome",
   "scripts": {
     "start": "node ."
@@ -16,6 +8,6 @@
   "dependencies": {
     "elo-js": "^1.0.1",
     "lodash-move": "^1.1.1",
-    "pg-promise": "^5.6.4"
+    "pg-promise": "^7.4.1"
   }
 }

@@ -25,7 +25,7 @@ function formatStreak (playerOne, playerTwo, streak) {
 ${list}`
 }
 
-module.exports = function streak ({ bot, socket, message }) {
+module.exports = function streak ({ bot, api, message }) {
   const players = message.mentions()
   if (!players.length) players.push(message.author)
   const playerOne = players[0]
@@ -34,6 +34,6 @@ module.exports = function streak ({ bot, socket, message }) {
   const onStreak = streak =>
     message.send(formatStreak(playerOne, playerTwo, streak))
 
-  if (playerTwo) socket.emit('streak-between', playerOne, playerTwo, onStreak)
-  else socket.emit('streak', playerOne, onStreak)
+  if (playerTwo) api.emit('streak-between', playerOne, playerTwo, onStreak)
+  else api.emit('streak', playerOne, onStreak)
 }
