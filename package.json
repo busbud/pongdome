@@ -11,7 +11,8 @@
   },
   "repository": "busbud/pongdome",
   "scripts": {
-    "lint": "standard"
+    "lint": "standard",
+    "start": "node ."
   },
   "dependencies": {
     "debug": "^3.1.0",

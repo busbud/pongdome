@@ -18,6 +18,10 @@ function nuit () {
 exports.run = (config) => {
   config = makeConfig(defaults, config)
 
+  // Prevent screen from sleeping by itself.
+  cp.spawn('xset', ['s', 'off'])
+  cp.spawn('xset', ['s', 'noblank'])
+
   let sleepId
 
   const api = io(config.API_URL)

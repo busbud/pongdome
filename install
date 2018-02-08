@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 # Go in the app directory.
-cd "$(dirname "$0")/"
+cd "$(dirname "$0")"
 
 for app in . api chat gpio screen web; do
     (
