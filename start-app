@@ -19,8 +19,8 @@ run() {
 # Removes cursor from screen when app is running.
 unclutter -idle 0.1 -root &
 
-# Run backend.
-run &
+# Run backend with debug logs.
+DEBUG=pongdome:* run &
 
 # Run frontend.
 DISPLAY=:0 chromium-browser --kiosk --disable-session-crashed-bubble --disable-infobars "web/index.html" &
