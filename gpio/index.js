@@ -3,10 +3,11 @@ const io = require('socket.io-client')
 
 const makeConfig = require('../config')
 const debug = require('../debug')('pongdome:gpio')
+const debugVerbose = require('../debug')('pongdome:gpio:verbose')
 const defaults = require('./config')
 
 function onPush (err, value, self, press, hold) {
-  debug(self.name, value)
+  debugVerbose(self.name, value)
 
   if (err) {
     debug(self.name)

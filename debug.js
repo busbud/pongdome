@@ -2,6 +2,7 @@ const debug = require('debug')
 const { isatty } = require('tty')
 
 debug.enable('pongdome:*')
+debug.disable('pongdome:gpio:verbose')
 
 module.exports = function makeDebug (name) {
   const stdoutDebug = debug(name)
