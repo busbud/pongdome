@@ -1,6 +1,8 @@
 const debug = require('debug')
 const { isatty } = require('tty')
 
+debug.enable('pongdome:*')
+
 module.exports = function makeDebug (name) {
   const stdoutDebug = debug(name)
   const stderrDebug = debug(name)
