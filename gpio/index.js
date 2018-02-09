@@ -1,8 +1,8 @@
-const debug = require('debug')('pongdome:gpio')
 const { Gpio } = require('onoff')
 const io = require('socket.io-client')
 
 const makeConfig = require('../config')
+const debug = require('../debug')('pongdome:gpio')
 const defaults = require('./config')
 
 function onPush (err, value, self, press, hold) {

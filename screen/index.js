@@ -1,8 +1,8 @@
-const debug = require('debug')('pongdome:screen')
 const cp = require('child_process')
 const io = require('socket.io-client')
 
 const makeConfig = require('../config')
+const debug = require('../debug')('pongdome:screen')
 const defaults = require('./config')
 
 function jour () {

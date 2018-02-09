@@ -1,10 +1,10 @@
 const formatServerAddress = require('@rdcl/format-server-address')
-const debug = require('debug')('pongdome:api')
 const Elo = require('elo-js')
 const move = require('lodash-move').default
 const makeIoServer = require('socket.io')
 
 const makeConfig = require('../config')
+const debug = require('../debug')('pongdome:api')
 const defaults = require('./config')
 const makeDatabase = require('./db')
 

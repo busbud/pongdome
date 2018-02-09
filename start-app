@@ -9,7 +9,7 @@ trap 'kill 0' EXIT
 
 # Run backend with restart loop on crash.
 run() {
-    while DEBUG=pongdome:* npm start | tee -a pongdome.log || true; do
+    while DEBUG_DUPLEX=true DEBUG=pongdome:* npm start 2>> pongdome.log || true; do
         echo "restarting in 5 seconds"
         sleep 5
     done

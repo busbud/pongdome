@@ -1,4 +1,3 @@
-const debug = require('debug')('pongdome:chat')
 const Table = require('cli-table2')
 const fs = require('fs')
 const numeral = require('numeral')
@@ -7,6 +6,7 @@ const Stdbot = require('stdbot')
 const uuid = require('uuid')
 
 const makeConfig = require('../config')
+const debug = require('../debug')('pongdome:chat')
 const defaults = require('./config')
 const actions = require('./actions')
 
