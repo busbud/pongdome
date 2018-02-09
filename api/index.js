@@ -1,3 +1,4 @@
+const formatServerAddress = require('@rdcl/format-server-address')
 const debug = require('debug')('pongdome:api')
 const Elo = require('elo-js')
 const move = require('lodash-move').default
@@ -352,7 +353,11 @@ exports.run = function api (config) {
     })
   })
 
-  io.listen(config.PORT)
+  const { httpServer } = io.listen(config.PORT)
+
+  httpServer.on('listening', () => {
+    debug(`PongDome API listening on ${formatServerAddress(httpServer.address())}`)
+  })
 }
 
 if (require.main === module) {
