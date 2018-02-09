@@ -9,7 +9,7 @@ trap 'kill 0' EXIT
 
 # Run backend with restart loop on crash.
 run() {
-    while npm start | tee -a pongdome.log || true; do
+    while DEBUG=pongdome:* npm start | tee -a pongdome.log || true; do
         echo "restarting in 5 seconds"
         sleep 5
     done
@@ -19,8 +19,8 @@ run() {
 # Removes cursor from screen when app is running.
 unclutter -idle 0.1 -root &
 
-# Run backend with debug logs.
-DEBUG=pongdome:* run &
+# Run backend.
+run &
 
 # Run frontend.
 DISPLAY=:0 chromium-browser --kiosk --disable-session-crashed-bubble --disable-infobars "web/index.html" &
