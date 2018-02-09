@@ -3,5 +3,5 @@
   "GPIO_P1_GREEN": "5",
   "GPIO_P1_RED": "6",
   "GPIO_P2_GREEN": "20",
-  "GPIO_21_RED": "21"
+  "GPIO_P2_RED": "21"
 }
