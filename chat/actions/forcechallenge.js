@@ -1,4 +1,4 @@
-module.exports = function forcechallenge ({ bot, socket, saveState, addRequest, message, flags, isAdmin }) {
+module.exports = function forcechallenge ({ bot, api, saveState, addRequest, message, flags, isAdmin }) {
   if (!isAdmin) return message.send('Nope.')
 
   const mentions = message.mentions()
@@ -13,5 +13,5 @@ module.exports = function forcechallenge ({ bot, socket, saveState, addRequest, 
 
   saveState()
 
-  socket.emit('match', { id, challenger, challengee, unranked: flags.forfun })
+  api.emit('match', { id, challenger, challengee, unranked: flags.forfun })
 }

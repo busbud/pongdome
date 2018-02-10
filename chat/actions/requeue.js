@@ -1,6 +1,6 @@
 const { formatQueue } = require('./queue')
 
-module.exports = function requeue ({ socket, findRequest, message, flags, isAdmin }) {
+module.exports = function requeue ({ api, findRequest, message, flags, isAdmin }) {
   const request = findRequest(message)
 
   if (!request.accepted) return message.send('This game is not in the queue.')
@@ -12,13 +12,13 @@ module.exports = function requeue ({ socket, findRequest, message, flags, isAdmi
 
   if (flags.first) {
     if (!isAdmin) return message.send('Nope.')
-    socket.emit('requeue', { id: request.id, where: 'first' }, onQueue)
+    api.emit('requeue', { id: request.id, where: 'first' }, onQueue)
   } else if (flags.before) {
     if (!isAdmin) return message.send('Nope.')
-    socket.emit('requeue', { id: request.id, where: 'before' }, onQueue)
+    api.emit('requeue', { id: request.id, where: 'before' }, onQueue)
   } else if (flags.after) {
-    socket.emit('requeue', { id: request.id, where: 'after' }, onQueue)
+    api.emit('requeue', { id: request.id, where: 'after' }, onQueue)
   } else {
-    socket.emit('requeue', { id: request.id, where: 'last' }, onQueue)
+    api.emit('requeue', { id: request.id, where: 'last' }, onQueue)
   }
 }

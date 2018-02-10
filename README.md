@@ -207,9 +207,9 @@ We'll install the required Node.js version using [nvm]:
 
 ```sh
 git clone https://github.com/creationix/nvm ~/.nvm
-echo 'source ~/.nvm/nvm.sh' >> ~/.bashrc # To persistently have nvm in your shell
-source ~/.nvm/nvm.sh # To load nvm now
-nvm install # To install the Node.js version needed by PongDome
+echo 'source ~/.nvm/nvm.sh' >> ~/.bashrc # To persistently have nvm in your shell.
+source ~/.nvm/nvm.sh # To load nvm now.
+nvm install 8 # To install the Node.js version needed by PongDome.
 ```
 
 Then install the npm dependencies, run build steps, copy default
@@ -219,16 +219,21 @@ configuration:
 ./install
 ```
 
-Update `api/config.json` to set your `db` URL. Also setup the schema with:
+Update `api/config.json` to set your `DATABASE_URL`. Also setup the
+schema with:
 
 ```sh
 createdb pongdome
 psql pongdome < api/sql/schema.sql
 ```
 
-Update `chat/config.js` to use and configure your [stdbot][stdbot]
+Update `chat/config.json` to use and configure your [stdbot][stdbot]
 adapter. You'll need to `npm install` the stdbot adapter of your choice
-before.
+before. For example:
+
+```sh
+npm install --no-save stdbot-flowdock
+```
 
 [stdbot]: https://github.com/stdbot/stdbot
 
@@ -238,15 +243,11 @@ For the diagram shown earlier, it would look like:
 
 ```json
 {
-  "api": "http://localhost:4242",
-  "playerOne": {
-    "green": 6,
-    "red": 5
-  },
-  "playerTwo": {
-    "green": 21,
-    "red": 20
-  }
+  "API_URL": "http://localhost:4242",
+  "GPIO_P1_GREEN": "5",
+  "GPIO_P1_RED": "6",
+  "GPIO_P2_GREEN": "20",
+  "GPIO_21_RED": "21"
 }
 ```
 

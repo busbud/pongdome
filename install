@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 # Go in the app directory.
-cd "$(dirname "$0")/"
+cd "$(dirname "$0")"
 
 for app in . api chat gpio screen web; do
     (
@@ -9,10 +9,6 @@ for app in . api chat gpio screen web; do
 
         if [ -f config.json.dist ] && ! [ -f config.json ]; then
             cp config.json.dist config.json
-        fi
-
-        if [ -f config.js.dist ] && ! [ -f config.js ]; then
-            cp config.js.dist config.js
         fi
 
         npm install

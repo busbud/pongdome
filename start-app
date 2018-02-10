@@ -1,42 +1,29 @@
-#!/bin/bash -e
+#!/bin/sh -e
 
+# Go in the app directory.
 cd "$(dirname "$0")"
 
-BASE=$(pwd)
+# Kill running background jobs on exit <https://stackoverflow.com/a/22644006>.
+trap 'exit' INT TERM
+trap 'kill 0' EXIT
 
-# Production environment (don't want to open development panel).
-export NODE_ENV=production
+# Run backend with restart loop on crash.
+run() {
+    while DEBUG_DUPLEX=true npm start 2>> pongdome.log || true; do
+        echo "restarting in 5 seconds"
+        sleep 5
+    done
+}
 
-# Make sure the app runs on the screen.
-export DISPLAY=:0
-
-# Kill running background jobs on exit.
-trap 'kill 0' INT TERM EXIT
-
-# Prevent screen from sleeping by itself.
-xset s off
-xset s noblank
-xset -dpms
 
 # Removes cursor from screen when app is running.
 unclutter -idle 0.1 -root &
 
-start() {
-    (
-        cd "$BASE/$1"
+# Run backend.
+run &
 
-        while npm start >> "$BASE/log/$1.stdout.log" 2>> "$BASE/log/$1.stderr.log" || true; do
-            echo "restarting $1 in 5 seconds"
-            sleep 5
-        done
-    ) &
-}
+# Run frontend.
+DISPLAY=:0 chromium-browser --kiosk --disable-session-crashed-bubble --disable-infobars "web/index.html" &
 
-start api
-start chat
-start gpio
-start screen
-
-chromium-browser --kiosk --disable-session-crashed-bubble --disable-infobars "web/index.html" &
-
+# Wait for background processes.
 wait

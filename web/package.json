@@ -1,14 +1,6 @@
 {
-  "name": "@busbud/pongdome-web",
-  "version": "0.1.0",
   "description": "PongDome web client.",
-  "homepage": "https://github.com/busbud/pongdome",
-  "bugs": "https://github.com/busbud/pongdome/issues",
   "license": "MIT",
-  "author": {
-    "name": "Busbud",
-    "url": "https://www.busbud.com/"
-  },
   "repository": "busbud/pongdome",
   "scripts": {
     "assets": "git show origin/assets:win.png > img/win.png && mkdir -p vendor && ln -fs ../node_modules/{normalize.css,npm-font-open-sans{,-condensed}} vendor",
@@ -20,13 +12,13 @@
     "watchify": "watchify js/main.js -o js/bundle.js"
   },
   "dependencies": {
-    "moment": "^2.18.1",
-    "normalize.css": "^6.0.0",
-    "npm-font-open-sans": "1.0.3",
-    "npm-font-open-sans-condensed": "1.0.3"
+    "moment": "^2.20.1",
+    "normalize.css": "^7.0.0",
+    "npm-font-open-sans": "^1.1.0",
+    "npm-font-open-sans-condensed": "^1.0.3"
   },
   "devDependencies": {
-    "browserify": "^14.1.0",
-    "watchify": "^3.9.0"
+    "browserify": "^15.2.0",
+    "watchify": "^3.10.0"
   }
 }
