@@ -20,13 +20,14 @@ exports.mostConsecutiveLosses = db =>
 exports.biggestCrush = db =>
   db.oneOrNone(`
     SELECT *
-      FROM (SELECT (SELECT name FROM players WHERE id = winner_id) AS winner_name,
-                   (SELECT name FROM players WHERE id = loser_id) AS loser_name,
-                   (SELECT sum(points) FROM unnest(winner_points) AS points) AS winner_points,
-                   (SELECT sum(points) FROM unnest(loser_points) AS points) AS loser_points
-              FROM history
-             WHERE created_at > date_trunc('week', current_date)
-          ORDER BY created_at DESC
+      FROM (
+                SELECT (SELECT name FROM players WHERE id = winner_id) AS winner_name,
+                      (SELECT name FROM players WHERE id = loser_id) AS loser_name,
+                      (SELECT sum(points) FROM unnest(winner_points) AS points) AS winner_points,
+                      (SELECT sum(points) FROM unnest(loser_points) AS points) AS loser_points
+                 FROM history
+                WHERE created_at > date_trunc('week', current_date)
+             ORDER BY created_at DESC
            ) AS games
   ORDER BY winner_points - loser_points DESC
      LIMIT 1
@@ -41,8 +42,9 @@ exports.headToHead = (db, playerOne, playerTwo) =>
 exports.playerStats = (db, player) =>
   db.oneOrNone(`
     SELECT *
-      FROM (SELECT row_number() OVER (ORDER BY elo DESC) AS rank, *
-            FROM leaderboard_display
+      FROM (
+             SELECT row_number() OVER (ORDER BY elo DESC) AS rank, *
+               FROM leaderboard_display
            ) AS rank
      WHERE player_id = $1
   `, [String(player.id)])
@@ -107,11 +109,11 @@ exports.streak = (db, player) =>
 
       return db.query(`
             WITH streak_start AS (
-                   SELECT created_at
-                     FROM history
-                    WHERE ${winning ? 'loser_id' : 'winner_id'} = $1
-                 ORDER BY created_at DESC
-                    LIMIT 1
+                     SELECT created_at
+                       FROM history
+                      WHERE ${winning ? 'loser_id' : 'winner_id'} = $1
+                   ORDER BY created_at DESC
+                      LIMIT 1
                  )
           SELECT history.*,
                  winner.name AS winner_name,
