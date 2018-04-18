@@ -1,19 +1,30 @@
 const debug = require('debug')
-const { isatty } = require('tty')
+const fs = require('fs')
+const util = require('util')
 
 debug.enable('pongdome:*,-pongdome:gpio:verbose')
 
-module.exports = function makeDebug (name) {
-  const stdoutDebug = debug(name)
-  const stderrDebug = debug(name)
+const debugFileStream = process.env.PONGDOME_DEBUG_FILE && fs.createWriteStream(process.env.PONGDOME_DEBUG_FILE, { flags: 'a' })
 
-  stdoutDebug.log = console.log
-  stdoutDebug.useColors = isatty(process.stdout.fd)
-  stderrDebug.log = console.error
-  stderrDebug.useColors = isatty(process.stderr.fd)
+function logToFile (...args) {
+  return debugFileStream.write(util.format.apply(util, arguments) + '\n');
+}
+
+function makeFileDebug (name) {
+  const fileDebug = debug(name)
+
+  fileDebug.log = logToFile
+  fileDebug.useColors = false
+
+  return fileDebug
+}
+
+module.exports = function makeDebug (name) {
+  const mainDebug = debug(name)
+  const fileDebug = debugFileStream && makeFileDebug(name)
 
   return function debug (...args) {
-    stdoutDebug(...args)
-    if (process.env.DEBUG_DUPLEX) stderrDebug(...args)
+    mainDebug(...args)
+    if (fileDebug) fileDebug(...args)
   }
 }
