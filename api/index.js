@@ -219,7 +219,7 @@ exports.run = function api (config) {
   db.getState()
     .then(state => {
       if (!state) return saveState()
-      currentMatch = state.current_match
+      currentMatch = newMatch(state.current_match)
       queue = state.queue.map(match => newMatch(match))
     })
 
