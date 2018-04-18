@@ -269,16 +269,16 @@ exports.run = function chat (config) {
         // Most cases, we posted the first live score and can piggy back on
         // that promise to make sure we edit the message after it's really
         // posted.
-        request.progress = request.progress.then(message => message.edit(liveScore))
+        request.progress = request.progress.then(message => message.edit(liveScore)).catch(debug)
       } else {
         // The promise was JSON stringified in the state as empty object, more
         // likely PongDome was restarted. This means that we can assume the
         // message to be already be posted and just edit it directly without
         // checking on the promise.
-        message.edit(liveScore)
+        message.edit(liveScore).catch(debug)
       }
     } else {
-      request.progress = request.message.send(liveScore)
+      request.progress = request.message.send(liveScore).catch(debug)
     }
   })
 
