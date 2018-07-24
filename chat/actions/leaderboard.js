@@ -13,8 +13,10 @@ function formatLeaderboard (leaderboard) {
   return '```\n' + table.toString() + '\n```'
 }
 
-module.exports = function leaderboard ({ api, message }) {
-  api.emit('leaderboard', leaderboard => {
+module.exports = function leaderboard ({ api, message, flags }) {
+  const method = flags.full ? 'leaderboard-full' : 'leaderboard'
+
+  api.emit(method, leaderboard => {
     message.send(formatLeaderboard(leaderboard))
   })
 }

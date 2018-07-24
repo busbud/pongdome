@@ -7,6 +7,9 @@ exports.setState = (db, currentMatch, queue) =>
 exports.leaderboard = db =>
   db.query('SELECT * FROM leaderboard_display_recent')
 
+exports.leaderboardFull = db =>
+  db.query('SELECT * FROM leaderboard_display')
+
 exports.matchUpsToday = db =>
   db.one('SELECT count(*) FROM history WHERE created_at::date = current_date')
     .then(result => result.count)

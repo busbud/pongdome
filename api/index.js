@@ -316,6 +316,10 @@ exports.run = function api (config) {
       db.leaderboard().then(f)
     })
 
+    socket.on('leaderboard-full', f => {
+      db.leaderboardFull().then(f)
+    })
+
     socket.on('match-ups-today', f => {
       db.matchUpsToday().then(f)
     })
