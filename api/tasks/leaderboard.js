@@ -1,7 +1,9 @@
 const Elo = require('elo-js')
-const db = require('../src/db')
+const pg = require('pg-promise')
+const config = require('../config')
 
 const elo = new Elo()
+const db = pg()(config.DATABASE_URL)
 
 const entry = {
   player_id: null,
@@ -57,5 +59,5 @@ ORDER BY created_at ASC
       entry.streak
     ])))
   })
-  .then(() => db.end())
+  .then(() => db.$pool.end())
   .catch(console.error)
