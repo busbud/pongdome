@@ -1,9 +1,9 @@
 {
   "API_URL": "http://localhost:4242",
-  "ADAPTER": "stdbot-flowdock",
+  "ADAPTER": "stdbot-slack",
   "ADAPTER_CONFIG": null,
-  "FLOWDOCK_TOKEN": "",
-  "FLOWDOCK_FLOWS": "pongdome",
-  "FLOWDOCK_USER": "true",
+  "SLACK_TOKEN": "",
+  "SLACK_CHANNELS": "pongdome",
+  "SLACK_DIRECT": "true",
   "ADMINS": "Rambo"
 }

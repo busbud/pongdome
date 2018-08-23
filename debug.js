@@ -7,7 +7,7 @@ debug.enable('pongdome:*,-pongdome:gpio:verbose')
 const debugFileStream = process.env.PONGDOME_DEBUG_FILE && fs.createWriteStream(process.env.PONGDOME_DEBUG_FILE, { flags: 'a' })
 
 function logToFile (...args) {
-  return debugFileStream.write(util.format.apply(util, arguments) + '\n');
+  return debugFileStream.write(util.format.apply(util, arguments) + '\n')
 }
 
 function makeFileDebug (name) {
