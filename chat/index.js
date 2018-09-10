@@ -19,6 +19,13 @@ function getAdapterConfig (config) {
     if (config.FLOWDOCK_USER === 'true') adapterConfig.streamConfig = { user: true }
     return adapterConfig
   }
+
+  if (config.ADAPTER === 'stdbot-slack') {
+    const adapterConfig = { token: config.SLACK_TOKEN, threaded: true, threadedBroadcast: true }
+    if (config.SLACK_CHANNELS) adapterConfig.channels = config.SLACK_CHANNELS.split(',')
+    if (config.SLACK_DIRECT) adapterConfig.direct = true
+    return adapterConfig
+  }
 }
 
 function makeBot (config) {
@@ -165,17 +172,16 @@ exports.run = function chat (config) {
   bot.on('message', message => {
     let results = matchAll(/(?:^|[^\w])#(\w+)/g, message.text)
 
+    message.mentions = function mentions () {
+      return bot.mentions(message)
+    }
+
     // Flowdock specific code: in a flow.
     if (message.raw.thread_id) {
       // Keep only tags that are actual Flowdock tags (will not match tags
       // inside code blocks and alike). Do it only in a flow because those
       // are never present in private messages.
       results = results.filter(match => message.raw.tags.includes(match[1]))
-
-      // In a flow, other users are properly tagged so use the native way.
-      message.mentions = function mentions () {
-        return bot.mentions(message)
-      }
     }
 
     // Flowdock specific code: in a private conversation.
@@ -275,7 +281,7 @@ exports.run = function chat (config) {
         // likely PongDome was restarted. This means that we can assume the
         // message to be already be posted and just edit it directly without
         // checking on the promise.
-        message.edit(liveScore).catch(debug)
+        request.message.edit(liveScore).catch(debug)
       }
     } else {
       request.progress = request.message.send(liveScore).catch(debug)
