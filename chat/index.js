@@ -21,7 +21,7 @@ function getAdapterConfig (config) {
   }
 
   if (config.ADAPTER === 'stdbot-slack') {
-    const adapterConfig = { token: config.SLACK_TOKEN, threaded: true, threadedBroadcast: true }
+    const adapterConfig = { token: config.SLACK_TOKEN, threaded: true, threadedBroadcast: true, asUser: true, parse: 'full' }
     if (config.SLACK_CHANNELS) adapterConfig.channels = config.SLACK_CHANNELS.split(',')
     if (config.SLACK_DIRECT) adapterConfig.direct = true
     return adapterConfig
