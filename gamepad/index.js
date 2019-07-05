@@ -37,7 +37,7 @@ exports.run = function gpio (config) {
   setInterval(gamepad.processEvents, 16)
 
   gamepad.on('down', (id, num) => {
-    const button = buttons[id]
+    const button = buttons[num]
 
     if (!button) {
       return
@@ -47,7 +47,7 @@ exports.run = function gpio (config) {
   })
 
   gamepad.on('up', (id, num) => {
-    const button = buttons[id]
+    const button = buttons[num]
 
     if (!button || button.disabled) {
       return
