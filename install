@@ -11,6 +11,6 @@ for app in . api chat gamepad gpio screen web; do
             cp config.json.dist config.json
         fi
 
-        npm install
+        npm ci
     )
 done
