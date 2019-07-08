@@ -21,6 +21,7 @@ PongDome is Busbud's *revolutionary* ping pong setup.
 | [Shared](package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg)](https://david-dm.org/busbud/pongdome) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg)](https://david-dm.org/busbud/pongdome?type=dev) |
 | [API](api/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=api)](https://david-dm.org/busbud/pongdome?path=api) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=api)](https://david-dm.org/busbud/pongdome?path=api&type=dev) |
 | [Chat](chat/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=chat)](https://david-dm.org/busbud/pongdome?path=chat) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=chat)](https://david-dm.org/busbud/pongdome?path=chat&type=dev) |
+| [Gamepad](gamepad/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=gamepad)](https://david-dm.org/busbud/pongdome?path=gamepad) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=gamepad)](https://david-dm.org/busbud/pongdome?path=gamepad&type=dev) |
 | [GPIO](gpio/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=gpio)](https://david-dm.org/busbud/pongdome?path=gpio) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=gpio)](https://david-dm.org/busbud/pongdome?path=gpio&type=dev) |
 | [Web](web/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=web)](https://david-dm.org/busbud/pongdome?path=web) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=web)](https://david-dm.org/busbud/pongdome?path=web&type=dev) |
 
@@ -29,8 +30,18 @@ PongDome is Busbud's *revolutionary* ping pong setup.
 ### Prerequisites
 
 * A [Raspberry Pi][rpi]. Current instructions are tested with the
-  [Raspberry Pi 3 Model B][rpi3b], with [Raspbian Stretch Lite][raspbian].
+  [Raspberry Pi 3 Model B][rpi3b], with [Raspbian Buster Lite][raspbian].
 * A screen.
+
+#### If using the gamepad module (easy way)
+
+* An arcade kit compatible with more or less generic USB gamepad
+  protocol as supported by the [gamepad] module. We used [this one][arcade-kit]
+  (not affiliated).
+* Likely 12 wires to extend the included wires to fit the table.
+
+#### If using the GPIO module (probably cheaper but a bit more work)
+
 * A [breadboard][breadboard].
 * A [T-Cobbler][t-cobbler].
 * 4 push buttons (ideally 2 [green][green] and 2 [red][red]).
@@ -39,8 +50,10 @@ PongDome is Busbud's *revolutionary* ping pong setup.
 * 4 [resistors, 2.2k ohm 5%][resistors].
 
 [rpi]: https://www.raspberrypi.org/
-[raspbian]: https://www.raspberrypi.org/downloads/raspbian/
 [rpi3b]: https://www.raspberrypi.org/products/raspberry-pi-3-model-b/
+[raspbian]: https://www.raspberrypi.org/downloads/raspbian/
+[gamepad]: https://www.npmjs.com/package/gamepad
+[arcade-kit]: https://www.amazon.ca/dp/B01M2X88QP/
 [breadboard]: https://www.adafruit.com/products/64
 [t-cobbler]: https://www.adafruit.com/products/2028
 [green]: https://www.adafruit.com/products/475
@@ -48,6 +61,18 @@ PongDome is Busbud's *revolutionary* ping pong setup.
 [resistors]: https://www.adafruit.com/products/2782
 
 ### Wiring everything together
+
+#### If using the gamepade module
+
+* Usually the arcade kit comes with slightly short wires as it's not
+  meant for a ping pong table, so you're gonna have to extend each of
+  them using electrical wire. Since the kit I used came with more than
+  twice more buttons that I needed, I leveraged the connectors of the
+  buttons I won't use to neatly fit the electrical wire extension.
+* Wire the gamepad buttons as per documentation of the kit you're using,
+  and plug USB.
+
+#### If using the GPIO module
 
 * Plug the Raspberry PI and the screen to a power outlet.
 * Plug the T-Cobbler to the breadboard (make sure the ribbon cable is
@@ -106,7 +131,7 @@ see how it affects the value read from GPIOs.
 
 ### Raspbian
 
-First install [Raspbian Stretch Lite][raspbian] following the
+First install [Raspbian Buster Lite][raspbian] following the
 official [instructions][raspbian-instructions].
 
 [raspbian-instructions]: https://www.raspberrypi.org/documentation/installation/installing-images/README.md
@@ -127,6 +152,12 @@ connect to a Wi-Fi network.
 Here's what `wpa_supplicant.conf` can look like:
 
 ```
+# I used to not need those but had to add it, not sure if it was because
+# of using a newer Raspbian version or changes in the WiFi router
+# configuration we're using.
+country=US
+ctrl_interface=/var/run/wpa_supplicant
+
 network={
 	ssid="your-network"
 	psk="your-password"
@@ -190,6 +221,12 @@ its preferences (set your proper resolution):
 echo '{"browser":{"window_placement":{"bottom": 1080,"left": 0,"maximized": true,"right": 1920,"top": 0}}}' > ~/.config/chromium/Default/Preferences
 ```
 
+In more recent versions of Chromium the above doesn't work anymore, you
+need to start Chromium once to let it create its configuration file,
+then merge the existing contents with the above configuration so it
+takes it into account. I did that directly in Vim, didn't bother writing
+a script to do it automatically.
+
 **Source:** <https://askubuntu.com/questions/124564/google-chrome-kiosk-screen-does-not-maximize>
 
 ### PongDome
@@ -209,7 +246,7 @@ We'll install the required Node.js version using [nvm]:
 git clone https://github.com/creationix/nvm ~/.nvm
 echo 'source ~/.nvm/nvm.sh' >> ~/.bashrc # To persistently have nvm in your shell.
 source ~/.nvm/nvm.sh # To load nvm now.
-nvm install 8 # To install the Node.js version needed by PongDome.
+nvm install 10 # To install the Node.js version needed by PongDome.
 ```
 
 Then install the npm dependencies, run build steps, copy default
@@ -232,12 +269,19 @@ adapter. You'll need to `npm install` the stdbot adapter of your choice
 before. For example:
 
 ```sh
-npm install --no-save stdbot-flowdock
+npm install --no-save stdbot-slack
 ```
 
 [stdbot]: https://github.com/stdbot/stdbot
 
-Update `gpio/config.json` to associate GPIO pins to buttons.
+If using the gamepad module, update `gamepad/config.json` to associate
+the button numbers.
+
+If using the GPIO module, update `gpio/config.json` to associate GPIO
+pins to buttons.
+
+If you plug the player one green, player one red, player two green,
+player two red respectively as 0, 1, 2, 3, you have nothing to change.
 
 For the diagram shown earlier, it would look like:
 
