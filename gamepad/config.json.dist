@@ -1,0 +1,7 @@
+{
+  "API_URL": "http://localhost:4242",
+  "GAMEPAD_P1_GREEN": "0",
+  "GAMEPAD_P1_RED": "1",
+  "GAMEPAD_P2_GREEN": "2",
+  "GAMEPAD_P2_RED": "3"
+}

@@ -1,7 +1,8 @@
 const debug = require('./debug')('pongdome:main')
 const api = require('./api')
 const chat = require('./chat')
-const gpio = process.platform === 'linux' ? require('./gpio') : { run () {} }
+const gamepad = require('./gamepad')
+// const gpio = process.platform === 'linux' ? require('./gpio') : { run () {} }
 const screen = require('./screen')
 
 process.on('uncaughtException', err => {
@@ -11,5 +12,6 @@ process.on('uncaughtException', err => {
 
 api.run()
 chat.run()
-gpio.run()
+gamepad.run()
+// gpio.run()
 screen.run()

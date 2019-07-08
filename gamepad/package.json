@@ -1,0 +1,11 @@
+{
+  "description": "PongDome gamepad adapter.",
+  "license": "MIT",
+  "repository": "busbud/pongdome",
+  "scripts": {
+    "start": "node ."
+  },
+  "dependencies": {
+    "gamepad": "^1.6.0"
+  }
+}
