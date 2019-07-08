@@ -18,11 +18,11 @@ PongDome is Busbud's *revolutionary* ping pong setup.
 
 | App | Dependencies | devDependencies |
 | --- | ------------ | --------------- |
-| [Shared](package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg)](https://david-dm.org/busbud/pongdome) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg)](https://david-dm.org/busbud/pongdome#info=devDependencies) |
-| [API](api/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=api)](https://david-dm.org/busbud/pongdome?path=api) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=api)](https://david-dm.org/busbud/pongdome?path=api#info=devDependencies) |
-| [Chat](chat/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=chat)](https://david-dm.org/busbud/pongdome?path=chat) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=chat)](https://david-dm.org/busbud/pongdome?path=chat#info=devDependencies) |
-| [GPIO](gpio/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=gpio)](https://david-dm.org/busbud/pongdome?path=gpio) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=gpio)](https://david-dm.org/busbud/pongdome?path=gpio#info=devDependencies) |
-| [Web](web/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=web)](https://david-dm.org/busbud/pongdome?path=web) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=web)](https://david-dm.org/busbud/pongdome?path=web#info=devDependencies) |
+| [Shared](package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg)](https://david-dm.org/busbud/pongdome) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg)](https://david-dm.org/busbud/pongdome?type=dev) |
+| [API](api/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=api)](https://david-dm.org/busbud/pongdome?path=api) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=api)](https://david-dm.org/busbud/pongdome?path=api&type=dev) |
+| [Chat](chat/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=chat)](https://david-dm.org/busbud/pongdome?path=chat) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=chat)](https://david-dm.org/busbud/pongdome?path=chat&type=dev) |
+| [GPIO](gpio/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=gpio)](https://david-dm.org/busbud/pongdome?path=gpio) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=gpio)](https://david-dm.org/busbud/pongdome?path=gpio&type=dev) |
+| [Web](web/package.json) | [![Dependency status](https://david-dm.org/busbud/pongdome.svg?path=web)](https://david-dm.org/busbud/pongdome?path=web) | [![devDependency status](https://david-dm.org/busbud/pongdome/dev-status.svg?path=web)](https://david-dm.org/busbud/pongdome?path=web&type=dev) |
 
 ## Setup
 
