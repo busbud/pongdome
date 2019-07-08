@@ -8,7 +8,7 @@
   "dependencies": {
     "cli-table2": "^0.2.0",
     "numeral": "^2.0.6",
-    "stdbot": "^0.4.0",
-    "uuid": "^3.2.1"
+    "stdbot": "^0.5.1",
+    "uuid": "^3.3.2"
   }
 }
