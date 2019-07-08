@@ -6,6 +6,6 @@
     "start": "node ."
   },
   "dependencies": {
-    "onoff": "^1.1.9"
+    "onoff": "^4.1.3"
   }
 }
