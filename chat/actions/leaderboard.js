@@ -3,7 +3,31 @@ const Table = require('cli-table2')
 function formatLeaderboard (leaderboard) {
   const table = new Table({
     head: ['#', 'name', 'elo', 'wins', 'losses', 'gp', 'ratio', 'streak'],
-    style: { head: [], border: [] }
+    chars: {
+      top: '',
+      'top-mid': '',
+      'top-left': '',
+      'top-right': '',
+      bottom: '',
+      'bottom-mid': '',
+      'bottom-left': '',
+      'bottom-right': '',
+      left: '',
+      'left-mid': '',
+      mid: '',
+      'mid-mid': '',
+      right: '',
+      'right-mid': '',
+      middle: ' '
+    },
+    style: {
+      'padding-left': 0,
+      'padding-right': 0,
+      // This removes CLI coloring meta characters
+      head: [],
+      border: []
+    },
+    colAligns: ['left', 'left', 'right', 'right', 'right', 'right', 'right', 'right']
   })
 
   leaderboard.forEach((entry, rank) => {
