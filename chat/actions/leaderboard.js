@@ -1,5 +1,20 @@
 const Table = require('cli-table2')
 
+// Limit name to 16 characters or less because Slack have a limited space in threds.
+function shortName (name) {
+  if (name.length <= 16) {
+    return name
+  }
+
+  const parts = name.split(' ')
+
+  if (parts.length <= 1) {
+    return name.substring(0, 16)
+  }
+
+  return shortName(parts.slice(0, -1).join(' '))
+}
+
 function formatLeaderboard (leaderboard) {
   const table = new Table({
     head: ['#', 'name', 'elo', 'wins', 'losses', 'gp', 'ratio', 'streak'],
@@ -31,7 +46,7 @@ function formatLeaderboard (leaderboard) {
   })
 
   leaderboard.forEach((entry, rank) => {
-    table.push([rank + 1, entry.name, entry.elo, entry.wins, entry.losses, entry.wins + entry.losses, entry.ratio, entry.streak])
+    table.push([rank + 1, shortName(entry.name), entry.elo, entry.wins, entry.losses, entry.wins + entry.losses, entry.ratio, entry.streak])
   })
 
   return '```\n' + table.toString() + '\n```'
