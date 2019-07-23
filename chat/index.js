@@ -222,9 +222,12 @@ exports.run = function chat (config) {
       return object
     }, {})
 
-    const isAdmin = admins
-      .map(name => name.toLowerCase())
-      .find(name => name === message.author.name.toLowerCase())
+    // Allow everybody to execute admin commands.
+    const isAdmin = () => true;
+
+    // const isAdmin = admins
+    //   .map(name => name.toLowerCase())
+    //   .find(name => name === message.author.name.toLowerCase())
 
     debug(`@${message.author.name}: #${action}${message.mentions().map(x => ` @${x.name}`).join('')}${flags.map(x => ` #${x}`).join('')} [${message.thread || 'dm'}]`)
 
