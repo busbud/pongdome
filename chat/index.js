@@ -40,7 +40,7 @@ exports.run = function chat (config) {
   const bot = makeBot(config)
   const api = io(config.API_URL)
 
-  const admins = config.ADMINS ? config.ADMINS.split(',') : []
+  // const admins = config.ADMINS ? config.ADMINS.split(',') : []
   const challenges = {}
   const matchesById = {}
   const matchesByThread = {}
@@ -170,6 +170,10 @@ exports.run = function chat (config) {
   })
 
   bot.on('message', message => {
+    if (message.author.id === botState.self.id) {
+      return
+    }
+
     let results = matchAll(/(?:^|[^\w])#(\w+)/g, message.text)
 
     message.mentions = function mentions () {
@@ -223,7 +227,7 @@ exports.run = function chat (config) {
     }, {})
 
     // Allow everybody to execute admin commands.
-    const isAdmin = () => true;
+    const isAdmin = () => true
 
     // const isAdmin = admins
     //   .map(name => name.toLowerCase())
