@@ -170,6 +170,10 @@ exports.run = function chat (config) {
   })
 
   bot.on('message', message => {
+    if (message.author.id === botState.self.id) {
+      return
+    }
+
     let results = matchAll(/(?:^|[^\w])#(\w+)/g, message.text)
 
     message.mentions = function mentions () {
